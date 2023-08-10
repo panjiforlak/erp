@@ -1,0 +1,32 @@
+RewriteEngine on 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+ 
+
+RewriteCond %{HTTP_REFERER} !^http://app.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://app.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://app2.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://app2.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.app.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.app.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.app2.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.app2.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^http://www.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://app.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://app.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://app2.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://app2.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.app.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.app.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.app2.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.app2.sejahtera7.com$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.sejahtera7.com/.*$      [NC]
+RewriteCond %{HTTP_REFERER} !^https://www.sejahtera7.com$      [NC]
+# RewriteRule .*\.(jpg|jpeg|gif|png|bmp)$ https://erp.sejahtera7.com [R,NC]
+
