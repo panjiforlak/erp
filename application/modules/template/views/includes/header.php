@@ -1,6 +1,6 @@
 <a style="position: fixed;height:44px;line-height:44px;background-color:#023b6d" href="<?php echo base_url('home') ?>" class="logo">
     <span class="logo-lg">
-        ERP SYSTEM <sup>v1.2</sup>
+        ERP SYSTEMs <sup>v1.2</sup>
         <!-- <img style="height: 30px;" src="<?php echo base_url((!empty($setting->logo) ? $setting->logo : 'assets/img/icons/logo.png')) ?>" alt=""> -->
     </span>
     <span class="logo-mini">
