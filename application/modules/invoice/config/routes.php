@@ -7,6 +7,7 @@ $route['gui_pos']             = "invoice/invoice/japasys_gui_pos";
 $route['invoice_list']        = "invoice/invoice/japasys_invoice_list";
 $route['invoice_details/(:num)'] = 'invoice/invoice/japasys_invoice_details/$1';
 $route['invoice_pad_print/(:num)'] = 'invoice/invoice/japasys_invoice_pad_print/$1';
+$route['inv_delete/(:num)/(:num)']    = 'invoice/invoice/japasys_delete_invoice/$1/$2';
 $route['pos_print/(:num)']    = 'invoice/invoice/japasys_invoice_pos_print/$1';
 $route['invoice_pos_print']    = 'invoice/invoice/japasys_pos_print_direct';
 $route['download_invoice/(:num)']  = 'invoice/invoice/japasys_download_invoice/$1';

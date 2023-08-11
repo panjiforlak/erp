@@ -237,7 +237,8 @@ $(document).ready(function () {
       { data: 'final_date' },
       { data: 'due_date' },
       { data: 'total_amount', class: "total_sale text-right", render: $.fn.dataTable.render.number(',', '.', 2, currency) },
-      { data: 'button' },
+      { data: 'prints', class: "text-center" },
+      { data: 'button', class: "text-center" },
     ],
 
     "footerCallback": function (row, data, start, end, display) {

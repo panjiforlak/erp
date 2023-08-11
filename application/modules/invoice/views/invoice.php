@@ -62,6 +62,7 @@
                                  <th><?php echo display('date') ?></th>
                                  <th><?php echo display('due_date') ?></th>
                                  <th><?php echo display('total_amount') ?></th>
+                                 <th class="text-center"><?php echo display('print') ?></th>
                                  <th class="text-center"><?php echo display('action') ?></th>
                              </tr>
                          </thead>

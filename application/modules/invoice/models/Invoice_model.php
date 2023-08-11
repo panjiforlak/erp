@@ -294,18 +294,19 @@ class Invoice_model extends CI_Model
 
         foreach ($records as $record) {
             $button = '';
+            $prints = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
-            $button .= '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+            $prints .= '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
 
-            $button .= '  <a href="' . $base_url . 'invoice_pad_print/' . $record->invoice_id . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pad_print') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
+            $prints .= '  <a href="' . $base_url . 'invoice_pad_print/' . $record->invoice_id . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pad_print') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
-            $button .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
+            $prints .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $button .= ' <a href="' . $base_url . 'invoice_edit/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
             }
-
+            $button .= '  <a href="' . $base_url . 'inv_delete/' . $record->invoice_id . '/' . number_format($record->total_amount, 0, '.', '') . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('cancel') . '"><i class="fa fa-times" aria-hidden="true"></i></a>';
 
 
             $details = '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
@@ -319,6 +320,7 @@ class Invoice_model extends CI_Model
                 'due_date'         => date("d-M-Y", strtotime($record->due_date)),
                 'total_amount'     => $record->total_amount,
                 'button'           => $button,
+                'prints'           => $prints,
 
             );
             $sl++;
@@ -398,6 +400,30 @@ class Invoice_model extends CI_Model
         } else {
             return false;
         }
+    }
+    //perubahan : penambahan func delete invoice
+    public function invoice_delete($invoice_id = "", $total_price = "")
+    {
+        $invoice_info = $this->db->select('*')->from('invoice')->where('invoice_id', $invoice_id)->get()->row();
+        $customer_info = $this->db->select('*')->from('customer_information')->where('customer_id', $invoice_info->customer_id)->get()->row();
+
+        //delete acc transaction VNo
+        $this->db->where('VNo', $invoice_id);
+        $this->db->delete("acc_transaction");
+        //kembalikan limit saldo
+
+        $limitsaldo = array(
+            'limit' => $customer_info->limit + $total_price
+        );
+
+        $this->db->where('customer_id', $customer_info->customer_id);
+        $this->db->update('customer_information', $limitsaldo);
+        //delete invoice detail
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->delete("invoice_details");
+        //delete invoice 
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->delete("invoice");
     }
     public function invoice_entry()
     {

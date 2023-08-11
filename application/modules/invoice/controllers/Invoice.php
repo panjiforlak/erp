@@ -92,7 +92,6 @@ class Invoice extends MX_Controller
         $data['page']       = "target_invoice";
 
         redirect("target_invoice");
-
     }
     // end module
     public function CheckInvoiceList()
@@ -432,7 +431,12 @@ class Invoice extends MX_Controller
         echo modules::run('template/layout', $data);
     }
 
+    public function japasys_delete_invoice($invoice_id = null, $total_price = null)
+    {
 
+        $this->invoice_model->invoice_delete($invoice_id, $total_price);
+        redirect('invoice_list');
+    }
     public function japasys_pos_print_direct()
     {
         $invoice_id = $this->input->post('invoice_id', true);
