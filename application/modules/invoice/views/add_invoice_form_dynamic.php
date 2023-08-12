@@ -57,7 +57,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="padding-top: 0;">
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="date" class="col-sm-3 col-form-label"><?php echo display('date') ?> <i class="text-danger">*</i></label>
@@ -99,14 +99,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="padding-top: 0;">
 
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="date" class="col-sm-3 col-form-label"><?php echo display('due_date') ?> </label>
                             <div class="col-sm-6">
                                 <?php
-
                                 $date = date('Y-m-d');
                                 ?>
                                 <input class="datepicker form-control" type="text" size="50" name="due_date" id="date2" value="<?php echo html_escape($date); ?>" tabindex="4" />
@@ -119,35 +118,35 @@
                     <table class="table table-bordered table-hover" id="normalinvoice">
                         <thead>
                             <tr>
-                                <th class="text-center product_field"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
+                                <th width='22%' class="text-center product_field"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
                                 <!-- <th class="text-center"><?php echo display('description') ?></th> -->
-                                <th class="text-center"><?php echo display('batch_no') ?><i class="text-danger">*</i></th>
-                                <th class="text-center">Stok</th>
-                                <th class="text-center"><?php echo display('unit') ?></th>
-                                <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i>
+                                <th width='9%' class="text-center"><?php echo display('batch_no') ?><i class="text-danger">*</i></th>
+                                <th width='5%' class="text-center">Stok</th>
+                                <th width='7%' class="text-center"><?php echo display('unit') ?></th>
+                                <th width='7%' class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i>
                                 </th>
-                                <th class="text-center"><?php echo display('price') ?> <i class="text-danger">*</i></th>
+                                <th width='10%' class="text-center">Harga Satuan <i class="text-danger">*</i></th>
 
                                 <?php if ($discount_type == 1) { ?>
-                                    <th class="text-center bg-success invoice_fields">Disc 1 %
+                                    <th width='5%' class="text-center bg-success ">Disc 1 %
                                     </th>
                                     <!-- <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th> -->
-                                    <th class="text-center bg-success invoice_fields">Disc 2 %
+                                    <th width='5%' class="text-center bg-success ">Disc 2 %
                                     </th>
                                     <!-- <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th> -->
-                                    <th class="text-center bg-success invoice_fields">Disc 3 %
+                                    <th width='5%' class="text-center bg-success ">Disc 3 %
                                     </th>
                                     <!-- <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th> -->
 
                                 <?php } elseif ($discount_type == 2) { ?>
-                                    <th class="text-center invoice_fields"><?php echo display('discount') ?> </th>
+                                    <th width='5%' class="text-center invoice_fields"><?php echo display('discount') ?> </th>
                                 <?php } elseif ($discount_type == 3) { ?>
-                                    <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
+                                    <th width='5%' class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
                                 <?php } ?>
 
-                                <th class="text-center invoice_fields"><?php echo display('total') ?>
+                                <th width='20%' class="text-center invoice_fields"><?php echo display('total') ?>
                                 </th>
-                                <th class="text-center"><?php echo display('action') ?></th>
+                                <th width='2%' class="text-center"><?php echo display('action') ?></th>
                             </tr>
                         </thead>
                         <tbody id="addinvoiceItem">
@@ -238,12 +237,12 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="8" rowspan="2">
+                                <td colspan="7" rowspan="2">
                                     <center><label for="details" class="  col-form-label text-center"><?php echo display('invoice_details') ?></label>
                                     </center>
                                     <textarea name="inva_details" id="details" class="form-control" placeholder="<?php echo display('invoice_details') ?>" tabindex="12"></textarea>
                                 </td>
-                                <td class="text-right" colspan="1"><b><?php echo display('invoice_discount') ?>:</b>
+                                <td class="text-right" colspan="2"><b><?php echo display('invoice_discount') ?>:</b>
                                 </td>
                                 <td class="text-right">
                                     <input type="text" onkeyup="japasys_invoice_quantity_calculate(1);" onchange="japasys_invoice_quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0" tabindex="13" />
@@ -252,7 +251,7 @@
                                 <td><a href="javascript:void(0)" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField_invoice_dynamic('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
                             </tr>
                             <tr>
-                                <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
+                                <td class="text-right" colspan="2"><b><?php echo display('total_discount') ?>:</b></td>
                                 <td class="text-right">
                                     <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0" readonly="readonly" />
                                 </td>
