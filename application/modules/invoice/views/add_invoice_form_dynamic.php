@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="4digit" class="col-form-label pb-2">Limit Pelanggan</label>
-                                    <input type="text" id="limit" class="form-control text-right" value="0" readonly="readonly" />
+                                    <input type="text" id="limit" class="form-control text-right" value="<?php echo number_format($limit, 0, ',', ''); ?>" readonly="readonly" />
                                     <!-- <input type="text" id="limits" class="form-control text-right" value="0" readonly="readonly" /> -->
                                 </div>
                                 <div class="form-group col-md-4">
