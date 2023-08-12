@@ -444,6 +444,7 @@ function invoice_calculateSum() {
 
 
     var gt = $("#grandTotal").val();
+    var l = $("#limit").val();
     var invdis = $("#invoice_discount").val();
     var vatamnt = 0;
     vatamnt = $("#total_vat_amnt").val();
@@ -466,8 +467,20 @@ function invoice_calculateSum() {
         pr = 0;
     }
     var t = $("#grandTotal").val(),
-        nt = parseFloat(t, 10) + pr;
+        nt = parseFloat(t, 10) + pr,
+        ls = parseFloat(l - nt);
     $("#n_total").val(nt.toFixed(0, 2));
+    $("#limits").val(ls);
+    if (ls < 0) {
+        $("#add_invoice").prop('disabled', true);
+        $("#info").prop('hidden', false);
+    } else {
+        $("#add_invoice").prop('disabled', false);
+        $("#info").prop('hidden', true);
+
+
+    }
+
 
 }
 
@@ -574,12 +587,15 @@ function invoice_paidamount() {
     }
     var t = $("#grandTotal").val(),
         a = $("#paidAmount").val(),
+        l = $("#limit").val(),
         e = t - a,
         f = e + pr,
-        nt = parseFloat(t, 10) + pr;
+        nt = parseFloat(t, 10) + pr,
+        lt = parseFloat(l - nt);
     d = a - nt;
 
     $("#pamount_by_method").val(a);
+    $("#limits").val(lt);
     $("#add_new_payment").empty();
     $("#pay-amount").text('0');
 
@@ -781,6 +797,23 @@ function customer_due(id) {
         }
     });
 }
+"use strict";
+function customer_limit(id) {
+    var csrf_test_name = $('[name="csrf_test_name"]').val();
+    var base_url = $("#base_url").val();
+    $.ajax({
+        url: base_url + 'invoice/invoice/limit',
+        type: 'post',
+        data: { customer_id: id, csrf_test_name: csrf_test_name },
+        success: function (msg) {
+
+            $("#limit").val(parseFloat(msg));
+        },
+        error: function (xhr, desc, err) {
+            alert('failed');
+        }
+    });
+}
 
 
 
@@ -819,10 +852,13 @@ function customer_autocomplete(sl) {
             $(this).parent().parent().find("#autocomplete_customer_id").val(ui.item.value);
             var customer_id = ui.item.value;
             customer_due(customer_id);
+            customer_limit(customer_id);
+
 
             $(this).unbind("change");
             return false;
-        }
+        },
+
     }
 
     $('body').on('keypress.autocomplete', '#customer_name', function () {

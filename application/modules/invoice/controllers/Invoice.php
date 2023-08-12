@@ -30,6 +30,7 @@ class Invoice extends MX_Controller
         $data['all_pmethod']   = $this->invoice_model->pmethod_dropdown();
         $data['customer_name'] = $walking_customer[0]['customer_name'];
         $data['customer_id']   = $walking_customer[0]['customer_id'];
+        $data['limit']   = $walking_customer[0]['limit'];
         $data['invoice_no']    = $this->number_generator();
         $data['title']         = display('add_invoice');
         $data['taxes']         = $this->invoice_model->tax_fileds();
@@ -1517,7 +1518,7 @@ class Invoice extends MX_Controller
 
         $list[''] = '';
         foreach ($customer_info as $value) {
-            $json_customer[] = array('label' => $value['customer_name'], 'value' => $value['customer_id']);
+            $json_customer[] = array('label' => $value['customer_name'], 'value' => $value['customer_id'], 'limit' => $value['limit']);
         }
         echo json_encode($json_customer);
     }
@@ -1579,6 +1580,21 @@ class Invoice extends MX_Controller
         $this->db->where('a.customer_id', $customer_id);
         $result = $this->db->get()->result_array();
         $balance = $result[0]['balance'];
+        $b = (!empty($balance) ? $balance : 0);
+        if ($b) {
+            echo  $b;
+        } else {
+            echo  $b;
+        }
+    }
+    public function limit()
+    {
+        $customer_id = $this->input->post('customer_id', TRUE);
+        $this->db->select("a.*");
+        $this->db->from('customer_information a');
+        $this->db->where('a.customer_id', $customer_id);
+        $result = $this->db->get()->result_array();
+        $balance = $result[0]['limit'];
         $b = (!empty($balance) ? $balance : 0);
         if ($b) {
             echo  $b;

@@ -181,7 +181,7 @@
                                 </td>
                                 <!-- Discount -->
                                 <td>
-                                    <input type="text" name="discount[]" onkeyup="japasys_invoice_quantity_calculate(1);"  onchange="japasys_invoice_quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
+                                    <input type="text" name="discount[]" onkeyup="japasys_invoice_quantity_calculate(1);" onchange="japasys_invoice_quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
                                     <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_1">
 
                                 </td>
@@ -189,7 +189,7 @@
                                 <input type="hidden" name="discountvalue[]" id="discount_value_1" class="form-control text-right" min="0" tabindex="18" placeholder="0" readonly />
 
                                 <td>
-                                    <input type="text" name="discount2[]" onkeyup="japasys_invoice_quantity_calculate(1);"  onchange="japasys_invoice_quantity_calculate(1);" id="discount2_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
+                                    <input type="text" name="discount2[]" onkeyup="japasys_invoice_quantity_calculate(1);" onchange="japasys_invoice_quantity_calculate(1);" id="discount2_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
                                     <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type_2" id="discount_type_1">
 
                                 </td>
@@ -197,7 +197,7 @@
                                 <input type="hidden" name="discountvalue2[]" id="discount_value2_1" class="form-control text-right" min="0" tabindex="18" placeholder="0" readonly />
 
                                 <td>
-                                    <input type="text" name="discount3[]" onkeyup="japasys_invoice_quantity_calculate(1);"  onchange="japasys_invoice_quantity_calculate(1);" id="discount3_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
+                                    <input type="text" name="discount3[]" onkeyup="japasys_invoice_quantity_calculate(1);" onchange="japasys_invoice_quantity_calculate(1);" id="discount3_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.0" />
                                     <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type_3" id="discount_type_1">
 
                                 </td>
@@ -337,7 +337,7 @@
                     <div class="col-sm-6 table-bordered p-20">
                         <div id="adddiscount" class="display-none">
                             <div class="row no-gutters">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
                                     <?php
@@ -345,7 +345,12 @@
                                     echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'id="mySelect" onchange = "check_creditsale()" class="card_typesl postform resizeselect form-control "') ?>
 
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
+                                    <label for="4digit" class="col-form-label pb-2">Limit Pelanggan</label>
+                                    <input type="text" id="limit" class="form-control text-right" value="0" readonly="readonly" />
+                                    <!-- <input type="text" id="limits" class="form-control text-right" value="0" readonly="readonly" /> -->
+                                </div>
+                                <div class="form-group col-md-4">
                                     <label for="4digit" class="col-form-label pb-2"><?php echo display('paid_amount'); ?></label>
 
                                     <input type="text" id="pamount_by_method" class="form-control number pay card_typesl postform resizeselect" name="pamount_by_method[]" value="" onchange="check_creditsale()" placeholder="0" readonly />
@@ -356,20 +361,25 @@
                             <div class="" id="add_new_payment">
 
                             </div>
-                            <div class="form-group text-right">
+                            <!-- <div class="form-group text-right">
                                 <div class="col-sm-12 pr-0">
 
                                     <button type="button" id="add_new_payment_type" class="btn btn-success w-md m-b-5"><?php echo display('new_p_method'); ?></button>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
+                    </div>
+                    <div class="col-sm-5  p-20">
+                        <h4 class="text-danger" display="false" id="info" hidden><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            Transaksi melebihi sisa limit yang tersedia!<br>Silahkan tambahkan limit pada pelanggan tersebut untuk melanjutkan transaksi</h4>
+                    </div>
+                    <div class="col-sm-1  p-20">
+                        <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="<?php echo display('submit') ?>" tabindex="17" />
                     </div>
                 </div>
                 <div class="form-group row text-right">
                     <div class="col-sm-12 p-20">
-                        <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="<?php echo display('submit') ?>" tabindex="17" />
-
                     </div>
                 </div>
                 <?php echo form_close() ?>
