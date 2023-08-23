@@ -667,26 +667,6 @@ class Report_model extends CI_Model
 
         return $query->row();
     }
-    public function get_invoice_bysalesid($param = '', $param2 = '', $param3)
-    {
-        $this->db->select('*');
-        $this->db->where('customer_id', $param);
-        $this->db->where('sales_by', $param2);
-
-        $query = $this->db->get('invoice');
-
-        return $query->row();
-    }
-    public function get_invoice_retur($param = '', $param2 = '', $param3)
-    {
-        $this->db->group_by('net_total_amount');
-        $this->db->select('net_total_amount');
-        $this->db->where('invoice_id', $param);
-
-        $query = $this->db->get('product_return');
-
-        return $query->row();
-    }
 
     public function get_period($param = '', $period = '', $year = '')
     {
