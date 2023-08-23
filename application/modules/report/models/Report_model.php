@@ -673,4 +673,10 @@ class Report_model extends CI_Model
 
         return $query->result_array();
     }
+    public function get_invoice_realisasi($yearmonth = '', $sku = '', $sales_id = '')
+    {
+
+        $query = $this->db->query('select id.*,sum(id.quantity) as tot_quantity,i.sales_by,i.date from invoice_details id left join invoice i on i.invoice_id=id.invoice_id where id.product_id="' . $sku . '" and i.date like "%' . $yearmonth . '%" and i.sales_by=' . $sales_id . '');
+        return $query->row();
+    }
 }

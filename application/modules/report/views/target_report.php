@@ -40,7 +40,7 @@
                             <tr>
 
                                 <td align="left" class="print-cominfo">
-                                    <span style="font-size: 14pt;font-weight:bold">
+                                    <span style="font-size: 12pt;font-weight:bold">
                                         <?php echo $company_info[0]['company_name']; ?>
 
                                     </span><br>
@@ -50,7 +50,7 @@
 
                                 <td align="right" class="print-table-tr">
                                     <br>
-                                    <strong>Laporan Target Penjualan Produk <br>Periode </strong>
+                                    <strong>Laporan Target Penjualan Produk <br>Periode <?php echo $period_name; ?> </strong>
                                 </td>
                             </tr>
 
@@ -61,7 +61,7 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2" class="text-center" style="padding-bottom: 15px;">No</th>
-                                    <th rowspan="2" width='600' style="padding-bottom: 15px;" class="text-center">Nama Produk</th>
+                                    <th rowspan="2" width='400' style="padding-bottom: 15px;" class="text-center">Nama Produk</th>
                                     <?php foreach ($get_sales as $key => $gs) : ?>
                                         <th colspan="2" class="text-center"><?php echo $gs['first_name'] ?></th>
                                     <?php endforeach; ?>
@@ -69,8 +69,8 @@
                                 </tr>
                                 <tr>
                                     <?php foreach ($get_sales as $key => $gs) : ?>
-                                        <th class="text-center">Target</th>
-                                        <th class="text-center">Realisasi</th>
+                                        <th class="text-center bg-primary">Target</th>
+                                        <th class="text-center bg-success">Realisasi</th>
                                     <?php endforeach; ?>
                                 </tr>
                             </thead>
@@ -81,21 +81,28 @@
                                         <td><?php echo $no++ . '.'; ?></td>
                                         <td><?php
                                             $getprod = $this->report_model->get_product_by_sku($val['product_sku']);
-                                            echo $getprod->product_name;
+                                            echo  $getprod->product_id . ' - <b>' . $getprod->product_name . '</b>';
                                             ?>
                                         </td>
                                         <?php foreach ($get_sales as $gs) : ?>
-                                            <td class="text-center">
+                                            <td class="text-center bg-info">
                                                 <?php
                                                 $get = $this->report_model->get_target_product_bysku_bysalesid($val['product_sku'], $gs['user_id'], $period_id);
                                                 echo $get->qty; ?>
                                             </td>
-                                            <td></td>
+                                            <td class="text-center">
+                                                <?php
+                                                $ymonth = date('Y-m');
+                                                $getRealisasi = $this->report_model->get_invoice_realisasi($ymonth, $val['product_sku'], $gs['user_id']);
+                                                echo $getRealisasi->tot_quantity ? number_format($getRealisasi->tot_quantity, 0, ',', '') : '<span class="text-danger">0</span>';
+                                                ?>
+                                            </td>
 
                                         <?php endforeach; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
+
 
                         </table>
                     </div>

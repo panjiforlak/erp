@@ -172,7 +172,10 @@ class Report extends MX_Controller
         $stoday = date('F');
         $gyear = date('Y');
 
+
         $gperiod = $this->report_model->get_period('', $stoday, $gyear);
+
+        $data['period_name'] = $stoday;
         $data['period_id'] = $gperiod[0]['id'];
         $data['get_sales'] = $this->report_model->get_sales();
         $data['get_target_product_group']   = $this->report_model->get_target_product_group($gperiod[0]['id']);
