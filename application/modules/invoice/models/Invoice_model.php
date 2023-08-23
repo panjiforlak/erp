@@ -30,6 +30,7 @@ class Invoice_model extends CI_Model
         $this->db->from('users u');
         $this->db->join('sec_userrole su', 'su.user_id = u.user_id', 'left');
         $this->db->where('su.roleid', '5');
+        $this->db->where('u.status', '1');
         if ($param) {
             $this->db->where('u.user_id', $param);
         }
@@ -65,49 +66,114 @@ class Invoice_model extends CI_Model
 
         return $query->result_array();
     }
+    public function get_target_product($param = '')
+    {
+        $this->db->select('*');
+        $this->db->from('target_product');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function get_target_product_group($param = '')
+    {
+        $this->db->group_by('product_sku');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+
+        $query = $this->db->get('target_product');
+
+        return $query->result_array();
+    }
+    public function get_target_product_bysku_bysalesid($param = '', $param2 = '', $param3)
+    {
+        $this->db->select('*');
+        $this->db->where('product_sku', $param);
+        $this->db->where('sales_id', $param2);
+        $this->db->where('period_id', $param3);
+        $query = $this->db->get('target_product');
+
+        return $query->row();
+    }
+    public function get_product_by_sku($sku = '')
+    {
+
+        $this->db->where('product_id', $sku);
+        $query = $this->db->get('product_information');
+
+        return $query->row();
+    }
+    public function target_delete($param = '', $param2)
+    {
+        $this->db->where('period_id', $param);
+        $this->db->where('product_sku', $param2);
+        $this->db->delete('target_product');
+    }
     public function add_target_period()
     {
         $period          = $this->input->post('period', TRUE);
         $start_date          = $this->input->post('from_date', TRUE);
         $end_date            = $this->input->post('to_date', TRUE);
-        $data = array(
 
-            'period'          => $period,
-            'start_date'      => $start_date,
-            'end_date'        => $end_date,
-        );
 
-        $this->db->insert('target_period', $data);
-    }
-    public function add_target()
-    {
-        $start_date          = $this->input->post('from_date', TRUE);
-        $end_date            = $this->input->post('to_date', TRUE);
-        $product_id          = $this->input->post('product_id', TRUE);
-        $sales_id            = $this->input->post('sales_id', TRUE);
-        $target              = $this->input->post('target', TRUE);
-        echo count($product_id);
-        die;
-        for ($i = 0, $n = count($sales_id); $i < $n; $i++) {
-            $start_date       = $start_date;
-            $end_date         = $end_date;
-            $product_id       = $product_id[$i];
-            $sales_id         = $sales_id[$i];
-            $target           = $target[$i];
-
-            $data1 = array(
-                'id_product'         => $product_id,
-                'id_sales'         => $sales_id,
-                'target'          => $target,
-                'start_date'           => $start_date,
-                'end_date'           => $end_date,
-            );
-            // if (!empty($sales_id)) {
-            //     $this->db->insert('sales_target', $data1);
-            // }
+        $date = strtotime($start_date);
+        $dat = date('Y', $date);
+        $month = date('F', $date);
+        if ($period != $month) {
+            $this->session->set_flashdata(array('exception' => 'Pastikan rentan waktu sesuai dengan periode yang ditentukan! '));
+            redirect('target_invoice');
+        } else {
+            $this->db->where('period', $period);
+            $this->db->like('start_date', $dat, 'both');
+            $get_periode = $this->db->get('target_period')->row();
+            if ($get_periode) {
+                $this->session->set_flashdata(array('exception' => 'Periode <b>' . $period . '-' . $dat . '</b> sudah tersedia'));
+                redirect('target_invoice');
+            } else {
+                $data = array(
+                    'period'          => $period,
+                    'start_date'      => $start_date,
+                    'end_date'        => $end_date,
+                );
+                $this->db->insert('target_period', $data);
+            }
         }
-        var_dump($data1 . '<br>');
     }
+    public function add_target_product()
+    {
+        $period_id              = $this->input->post('period_id', TRUE);
+        $sku                    = $this->input->post('product_id', TRUE);
+        $sales_id               = $this->input->post('sales_id', TRUE);
+        $target_qty               = $this->input->post('target_qty', TRUE);
+
+        $this->db->where('period_id', $period_id);
+        $this->db->where('product_sku', $sku);
+        $cekTargetProduct = $this->db->get('target_product')->row();
+
+        if ($cekTargetProduct->product_sku) {
+
+            $this->session->set_flashdata(array('exception' => $this->input->post('product_name') . ' sudah masuk dalam target'));
+            redirect('target_invoice/' . $period_id);
+        } else {
+
+            foreach ($sales_id as $key => $val) {
+                $arr[] = array(
+                    'period_id' => $period_id,
+                    'product_sku' => $sku,
+                    'sales_id' => $val,
+                    'qty' => $target_qty[$key]
+                );
+            }
+            $this->session->set_flashdata(array('message' => $this->input->post('product_name') . ' berhasil masuk dalam target'));
+        }
+
+        $this->db->insert_batch('target_product', $arr);
+    }
+
     public function customer_list()
     {
         $query = $this->db->select('*')

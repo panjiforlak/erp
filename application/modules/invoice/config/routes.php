@@ -20,3 +20,4 @@ $route['terms_add/(:num)'] = 'invoice/invoice/japasys_terms_form/$1';
 
 $route['target_invoice']         = "invoice/invoice/japasys_target_form";
 $route['target_invoice/(:num)']         = "invoice/invoice/japasys_target_sales_form/$1";
+$route['target_delete/(:num)/(:any)']         = "invoice/invoice/japasys_target_product_delete/$1/$2";

@@ -70,6 +70,8 @@ class Invoice extends MX_Controller
     {
         $data['id_period']     = $param;
         $data['get_periode']   = $this->invoice_model->get_period($param);
+        $data['get_target_product_group']   = $this->invoice_model->get_target_product_group($param);
+        $data['get_target_product']   = $this->invoice_model->get_target_product($param);
         $data['get_sales']      = $this->invoice_model->get_sales();
         $data['title']         = "Target Sales - Product";
         $data['module']        = "invoice";
@@ -93,6 +95,15 @@ class Invoice extends MX_Controller
         $data['page']       = "target_invoice";
 
         redirect("target_invoice");
+    }
+    function japasys_target_product_insert()
+    {
+        $id = $this->input->post('period_id');
+        $this->invoice_model->add_target_product();
+        $data['module']     = "invoice";
+        $data['page']       = "target_invoice";
+
+        redirect("target_invoice/" . $id);
     }
     // end module
     public function CheckInvoiceList()
@@ -437,6 +448,11 @@ class Invoice extends MX_Controller
 
         $this->invoice_model->invoice_delete($invoice_id, $total_price);
         redirect('invoice_list');
+    }
+    public function japasys_target_product_delete($period_id = null, $product_sku = null)
+    {
+        $this->invoice_model->target_delete($period_id, $product_sku);
+        redirect('target_invoice/' . $period_id);
     }
     public function japasys_pos_print_direct()
     {
