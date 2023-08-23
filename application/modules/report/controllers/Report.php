@@ -167,6 +167,20 @@ class Report extends MX_Controller
         echo modules::run('template/layout', $data);
     }
 
+    public function japasys_target_report()
+    {
+        $stoday = date('F');
+        $gyear = date('Y');
+
+        $gperiod = $this->report_model->get_period('', $stoday, $gyear);
+        $data['period_id'] = $gperiod[0]['id'];
+        $data['get_sales'] = $this->report_model->get_sales();
+        $data['get_target_product_group']   = $this->report_model->get_target_product_group($gperiod[0]['id']);
+        $data['get_target_product']   = $this->report_model->get_target_product($gperiod[0]['id']);
+        $data['module']   = "report";
+        $data['page']     = "target_report";
+        echo modules::run('template/layout', $data);
+    }
 
     //    ============ its for todays_customer_receipt =============
     public function japasys_todays_customer_received()

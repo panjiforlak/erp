@@ -591,4 +591,86 @@ class Report_model extends CI_Model
     {
         return $this->db->insert('closing_records', $data);
     }
+    // model target
+    public function get_sales($param = '')
+    {
+
+        $attributes = array('ENGINE' => 'InnoDB');
+        $this->db->select('u.*,su.roleid');
+        $this->db->from('users u');
+        $this->db->join('sec_userrole su', 'su.user_id = u.user_id', 'left');
+        $this->db->where('su.roleid', '5');
+        $this->db->where('u.status', '1');
+        if ($param) {
+            $this->db->where('u.user_id', $param);
+        }
+        $this->db->order_by('u.first_name', 'ASC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+
+    public function get_target_product_group($param = '')
+    {
+        $this->db->group_by('product_sku');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+
+        $query = $this->db->get('target_product');
+
+        return $query->result_array();
+    }
+
+    public function get_product_by_sku($sku = '')
+    {
+
+        $this->db->where('product_id', $sku);
+        $query = $this->db->get('product_information');
+
+        return $query->row();
+    }
+
+    public function get_target_product_bysku_bysalesid($param = '', $param2 = '', $param3)
+    {
+        $this->db->select('*');
+        $this->db->where('product_sku', $param);
+        $this->db->where('sales_id', $param2);
+        $this->db->where('period_id', $param3);
+        $query = $this->db->get('target_product');
+
+        return $query->row();
+    }
+
+    public function get_period($param = '', $period = '', $year = '')
+    {
+        $this->db->select('*');
+        $this->db->from('target_period');
+        if ($param) {
+            $this->db->where('id', $param);
+        }
+        if ($period) {
+            $this->db->where('period', $period);
+        }
+        if ($year) {
+            $this->db->like('start_date', $year, 'both');
+        }
+        $this->db->order_by('start_date', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+
+    public function get_target_product($param = '')
+    {
+        $this->db->select('*');
+        $this->db->from('target_product');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 }

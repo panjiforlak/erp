@@ -362,7 +362,7 @@
 
 
         <!-- Stock menu start -->
-        <?php if ($this->permission1->method('stock', 'read')->access()|| $this->permission1->method('stock_report', 'read')->access()) { ?>
+        <?php if ($this->permission1->method('stock', 'read')->access() || $this->permission1->method('stock_report', 'read')->access()) { ?>
             <li class="treeview <?php
                                 if ($this->uri->segment('1') == ("stock")) {
                                     echo "active";
@@ -639,6 +639,14 @@
                                             } else {
                                                 echo " ";
                                             } ?>"><a href="<?php echo base_url('todays_report') ?>"><?php echo display('todays_report') ?></a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->permission1->method('target_report', 'read')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("target_report")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            } ?>"><a href="<?php echo base_url('target_report') ?>"><?php echo display('target_report') ?></a>
                         </li>
                     <?php } ?>
                     <?php if ($this->permission1->method('todays_customer_receipt', 'read')->access()) { ?>
