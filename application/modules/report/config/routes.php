@@ -8,6 +8,7 @@ $route['closing_report'] = "report/report/japasys_closing_report";
 $route['closing_report_search'] = "report/report/japasys_closing_report_search";
 $route['todays_report']  = "report/report/japasys_todays_report";
 $route['target_report']  = "report/report/japasys_target_report";
+// $route['target_report/(:any)/(:any)']  = "report/report/japasys_target_report/$1/$2";
 $route['todays_customer_received']  = "report/report/japasys_todays_customer_received";
 $route['todays_customerwise_received']  = "report/report/japasys_customerwise_received";
 $route['sales_report']  = "report/report/japasys_todays_sales_report";

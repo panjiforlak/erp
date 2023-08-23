@@ -9,7 +9,7 @@
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <span>Target Penjualan Pendapatan - <span class="text-danger"> <?php echo strtoupper($get_periode[0]['period']) . ' (' . date('d/m/Y', strtotime($get_periode[0]['start_date'])) . ' - ' . date('d/m/Y', strtotime($get_periode[0]['end_date'])) . ')'; ?></span></span>
+                    <span>Target Pendapatan Penjualan - <span class="text-danger"> <?php echo strtoupper($get_periode[0]['period']) . ' (' . date('d/m/Y', strtotime($get_periode[0]['start_date'])) . ' - ' . date('d/m/Y', strtotime($get_periode[0]['end_date'])) . ')'; ?></span></span>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <span>Target by Amount</span>
+                    <span>Target Pendapatan</span>
                     <span style="float: right;"><a href="<?php echo base_url('target_amount_delete/' . $get_periode[0]['id']); ?>" class="btn btn-sm btn-danger"><?php echo display('delete'); ?></a></span>
 
                     <hr>

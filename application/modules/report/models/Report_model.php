@@ -610,14 +610,40 @@ class Report_model extends CI_Model
         return $query->result_array();
     }
 
-    public function get_target_product_group($param = '')
+    public function get_target_product_group($param = '', $from = null, $end = null)
     {
         $this->db->group_by('product_sku');
         if ($param) {
             $this->db->where('period_id', $param);
         }
+        if ($from) {
+            $this->db->where('tp.start_date <=', $from);
+        }
+        if ($end) {
+            $this->db->where('tp.end_date >=', $end);
+        }
 
+        $query = $this->db->join('target_period tp', 'tp.id=target_product.period_id', 'left');
         $query = $this->db->get('target_product');
+
+        return $query->result_array();
+    }
+    public function get_customer_invoice_group($param = '', $from = null, $end = null)
+    {
+        $this->db->select('invoice.*,ci.customer_name');
+        $this->db->group_by('customer_id');
+        // if ($param) {
+        //     $this->db->where('period_id', $param);
+        // }
+        if ($from) {
+            $this->db->where('invoice.date >=', $from);
+        }
+        if ($end) {
+            $this->db->where('invoice.date <=', $end);
+        }
+
+        $query = $this->db->join('customer_information ci', 'ci.customer_id=invoice.customer_id', 'left');
+        $query = $this->db->get('invoice');
 
         return $query->result_array();
     }
@@ -638,6 +664,26 @@ class Report_model extends CI_Model
         $this->db->where('sales_id', $param2);
         $this->db->where('period_id', $param3);
         $query = $this->db->get('target_product');
+
+        return $query->row();
+    }
+    public function get_invoice_bysalesid($param = '', $param2 = '', $param3)
+    {
+        $this->db->select('*');
+        $this->db->where('customer_id', $param);
+        $this->db->where('sales_by', $param2);
+
+        $query = $this->db->get('invoice');
+
+        return $query->row();
+    }
+    public function get_invoice_retur($param = '', $param2 = '', $param3)
+    {
+        $this->db->group_by('net_total_amount');
+        $this->db->select('net_total_amount');
+        $this->db->where('invoice_id', $param);
+
+        $query = $this->db->get('product_return');
 
         return $query->row();
     }
@@ -673,10 +719,34 @@ class Report_model extends CI_Model
 
         return $query->result_array();
     }
-    public function get_invoice_realisasi($yearmonth = '', $sku = '', $sales_id = '')
+    public function get_target_amount($param = '', $from = null, $end = null)
     {
+        $this->db->select('target_amount.*,tp.start_date,tp.end_date');
+        $this->db->from('target_amount');
+        $this->db->join('target_period tp', 'tp.id=target_amount.period_id', 'left');
 
-        $query = $this->db->query('select id.*,sum(id.quantity) as tot_quantity,i.sales_by,i.date from invoice_details id left join invoice i on i.invoice_id=id.invoice_id where id.product_id="' . $sku . '" and i.date like "%' . $yearmonth . '%" and i.sales_by=' . $sales_id . '');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+        if ($from) {
+            $this->db->where('tp.start_date <=', $from);
+        }
+        if ($end) {
+            $this->db->where('tp.end_date >=', $end);
+        }
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function get_invoice_realisasi($yearmonth = '', $sku = '', $sales_id = '', $from = null, $to = null)
+    {
+        if ($from && $to) {
+            $where = 'and i.date >="' . $from . '" and i.date <="' . $to . '"';
+        } else {
+            $where = 'and i.date like "%' . $yearmonth . '%"';
+        }
+        $query = $this->db->query('select id.*,sum(id.quantity) as tot_quantity,i.sales_by,i.date from invoice_details id left join invoice i on i.invoice_id=id.invoice_id where id.product_id="' . $sku . '" ' . $where . ' and i.sales_by=' . $sales_id . '');
         return $query->row();
     }
 }
