@@ -81,7 +81,7 @@
                 <div class="panel-title">
                     <span>Target by Produk</span>
                     <hr>
-                    <table class="table table-sm table-hover table-striped table-bordered " style="font-size: 10pt;" id="dataTableExample2" cellspacing="0" width="100%">
+                    <table class="table table-sm table-hover table-striped table-bordered datatable" style="font-size: 10pt;" id="dataTableExample2" cellspacing="0" width="100%">
                         <thead class="bg-success">
                             <tr>
                                 <th>Nama Produk</th>
@@ -89,7 +89,6 @@
                                     <th class="text-center"><?php echo $gs['first_name']; ?></th>
                                 <?php endforeach; ?>
                                 <th class="text-center bg-danger"><?php echo display('delete'); ?></th>
-
                             </tr>
                         </thead>
                         <tbody>

@@ -77,15 +77,17 @@
             <div class="panel-heading">
                 <div class="panel-title">
                     <span>Periode</span>
-                    <table class="table table-sm table-hover table-striped" style="font-size: 10pt;" id="dataTableExample2" cellspacing="0" width="100%">
+                    <table class="table table-sm table-hover table-bordered table-striped datatable" style="font-size: 10pt;" cellspacing="0" width="100%">
 
-                        <thead>
+                        <thead class="bg-success">
                             <tr>
                                 <th>No</th>
                                 <th>Tahun</th>
                                 <th>Bulan Periode</th>
+                                <th class="text-center">Target Produk</th>
+                                <th class="text-center">Target Amount</th>
                                 <th class="text-center">Set Target</th>
-                                <th>Tools</th>
+                                <th><?php echo display('delete'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,14 +103,32 @@
                                         ?></td>
                                     <td><?php echo $gp['period']; ?></td>
                                     <td class="text-center">
-                                        <a href="<?php echo base_url() . 'target_invoice/' . $gp['id']; ?>" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Atur Target Produk"><i class="text-black fa fa-fw fa-shopping-cart" aria-hidden="true"></i>
+                                        <?php $getTProd = $this->invoice_model->get_target_product($gp['id']);
+                                        if ($getTProd[0]['id']) {
+                                            echo '<i class="fa fa-fw fa-check text-success" aria-hidden="true"></i>';
+                                        } else {
+                                            echo '<i class="fa fa-fw fa-times text-danger" aria-hidden="true"></i>';
+                                        };
+                                        ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php $getTAmount = $this->invoice_model->get_target_amount($gp['id']);
+                                        if ($getTAmount[0]['id']) {
+                                            echo '<i class="fa fa-fw fa-check text-success" aria-hidden="true"></i>';
+                                        } else {
+                                            echo '<i class="fa fa-fw fa-times text-danger" aria-hidden="true"></i>';
+                                        };
+                                        ?>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href="<?php echo base_url() . 'target_product/' . $gp['id']; ?>" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Atur Target Produk"><i class="text-black fa fa-fw fa-shopping-cart" aria-hidden="true"></i>
                                         </a>
-                                        <a href="<?php echo base_url() . 'target_invoice/' . $gp['id']; ?>" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Atur Target Pendapatan"><i class="text-black fa fa-fw fa-usd" aria-hidden="true"></i>
+                                        <a href="<?php echo base_url() . 'target_amount/' . $gp['id']; ?>" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="right" title="Atur Target Pendapatan"><i class="text-black fa fa-fw fa-usd" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="<?php echo base_url() . 'target_invoice/' . $gp['id']; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                        <button style="margin-left: 2px;" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
+                                        <a href="<?php echo base_url('target_period_delete/' . $gp['id']); ?>" style="margin-left: 2px;" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

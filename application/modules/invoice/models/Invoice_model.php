@@ -61,7 +61,7 @@ class Invoice_model extends CI_Model
         if ($param) {
             $this->db->where('id', $param);
         }
-        $this->db->order_by('period', 'DESC');
+        $this->db->order_by('start_date', 'DESC');
         $query = $this->db->get();
 
         return $query->result_array();
@@ -70,6 +70,18 @@ class Invoice_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('target_product');
+        if ($param) {
+            $this->db->where('period_id', $param);
+        }
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function get_target_amount($param = '')
+    {
+        $this->db->select('*');
+        $this->db->from('target_amount');
         if ($param) {
             $this->db->where('period_id', $param);
         }
@@ -107,11 +119,27 @@ class Invoice_model extends CI_Model
 
         return $query->row();
     }
+    public function target_period_delete($param = '')
+    {
+        $this->db->where('id', $param);
+        $this->db->delete('target_period');
+
+        $this->db->where('period_id', $param);
+        $this->db->delete('target_product');
+
+        $this->db->where('period_id', $param);
+        $this->db->delete('target_amount');
+    }
     public function target_delete($param = '', $param2)
     {
         $this->db->where('period_id', $param);
         $this->db->where('product_sku', $param2);
         $this->db->delete('target_product');
+    }
+    public function target_amount_delete($param = '', $param2)
+    {
+        $this->db->where('period_id', $param);
+        $this->db->delete('target_amount');
     }
     public function add_target_period()
     {
@@ -157,7 +185,7 @@ class Invoice_model extends CI_Model
         if ($cekTargetProduct->product_sku) {
 
             $this->session->set_flashdata(array('exception' => $this->input->post('product_name') . ' sudah masuk dalam target'));
-            redirect('target_invoice/' . $period_id);
+            redirect('target_target/' . $period_id);
         } else {
 
             foreach ($sales_id as $key => $val) {
@@ -172,6 +200,36 @@ class Invoice_model extends CI_Model
         }
 
         $this->db->insert_batch('target_product', $arr);
+    }
+    public function add_target_amount()
+    {
+        $period_id              = $this->input->post('period_id', TRUE);
+        $sales_id               = $this->input->post('sales_id', TRUE);
+        $amount               = $this->input->post('amount', TRUE);
+
+        $this->db->where('period_id', $period_id);
+        $cekTargetProduct = $this->db->get('target_amount')->row();
+
+        if ($cekTargetProduct->period_id) {
+
+            $this->session->set_flashdata(array('exception' =>  'Target pendapatan diperiode ini sudah ada'));
+            redirect('target_amount/' . $period_id);
+        } else {
+
+            foreach ($sales_id as $key => $val) {
+                $arr[] = array(
+                    'period_id' => $period_id,
+                    'sales_id' => $val,
+                    'amount' => $amount[$key]
+                );
+            }
+            $this->session->set_flashdata(array('message' => ' berhasil menargetkan pendapatan'));
+        }
+        // echo '<pre>';
+        // var_dump($arr);
+        // echo '</pre>';
+        // die;
+        $this->db->insert_batch('target_amount', $arr);
     }
 
     public function customer_list()

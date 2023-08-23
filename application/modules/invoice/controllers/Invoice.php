@@ -79,6 +79,19 @@ class Invoice extends MX_Controller
 
         echo modules::run('template/layout', $data);
     }
+    // amount
+    function japasys_target_amount_form($param = null)
+    {
+        $data['id_period']     = $param;
+        $data['get_periode']   = $this->invoice_model->get_period($param);
+        $data['get_target_amount']   = $this->invoice_model->get_target_amount($param);
+        $data['get_sales']      = $this->invoice_model->get_sales();
+        $data['title']         = "Target Sales - Product";
+        $data['module']        = "invoice";
+        $data['page']          = "add_target_amount";
+
+        echo modules::run('template/layout', $data);
+    }
 
 
     function japasys_target_insert()
@@ -103,7 +116,17 @@ class Invoice extends MX_Controller
         $data['module']     = "invoice";
         $data['page']       = "target_invoice";
 
-        redirect("target_invoice/" . $id);
+        redirect("target_product/" . $id);
+    }
+    function japasys_target_amount_insert()
+    {
+
+        $id = $this->input->post('period_id');
+        $this->invoice_model->add_target_amount();
+        $data['module']     = "invoice";
+        $data['page']       = "target_invoice";
+
+        redirect("target_amount/" . $id);
     }
     // end module
     public function CheckInvoiceList()
@@ -449,10 +472,20 @@ class Invoice extends MX_Controller
         $this->invoice_model->invoice_delete($invoice_id, $total_price);
         redirect('invoice_list');
     }
+    public function japasys_target_delete($period_id = null)
+    {
+        $this->invoice_model->target_period_delete($period_id);
+        redirect('target_invoice');
+    }
     public function japasys_target_product_delete($period_id = null, $product_sku = null)
     {
         $this->invoice_model->target_delete($period_id, $product_sku);
-        redirect('target_invoice/' . $period_id);
+        redirect('target_product/' . $period_id);
+    }
+    public function japasys_target_amount_delete($period_id = null, $product_sku = null)
+    {
+        $this->invoice_model->target_amount_delete($period_id, $product_sku);
+        redirect('target_amount/' . $period_id);
     }
     public function japasys_pos_print_direct()
     {
