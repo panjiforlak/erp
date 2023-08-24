@@ -68,7 +68,7 @@
                                     <th rowspan="2" class="text-center" style="padding-bottom: 15px;">No</th>
                                     <th rowspan="2" width='400' style="padding-bottom: 15px;" class="text-center">Nama Produk</th>
                                     <?php foreach ($get_sales as $key => $gs) : ?>
-                                        <th colspan="2" class="text-center"><?php echo $gs['first_name'] ?></th>
+                                        <th colspan="2" class="text-center"><?php echo strtoupper($gs['first_name']); ?></th>
                                     <?php endforeach; ?>
 
                                 </tr>
@@ -159,25 +159,66 @@
                         </table>
                         <div class="table-responsive paddin5ps">
                             <?php foreach ($get_sales as $key => $gs) : ?>
+                                <?php $getInvv = $this->report_model->get_target_invoice($gs['user_id'], $from_date ? $from_date : $stoday, $to_date ? $to_date : $today); ?>
+
+
                                 <table class="table table-bordered table-striped table-hover">
                                     <thead>
                                         <tr>
-                                            <th colspan="4" class="text-center"><?php echo $gs['first_name'] ?></th>
+                                            <th colspan="7" class="text-left bg-primary" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;"><?php echo strtoupper($gs['first_name']); ?></th>
                                         </tr>
                                         <tr>
 
-                                            <th class="text-center bg-info">Invoice</th>
-                                            <th class="text-center bg-warning">Penjualan</th>
+                                            <th class="text-center ">No</th>
+                                            <th class="text-center ">Invoice Date</th>
+                                            <th class="text-center ">Invoice</th>
+                                            <th class="text-center ">Pelanggan</th>
+                                            <th class="text-center bg-info">Penjualan</th>
                                             <th class="text-center bg-danger">Retur</th>
                                             <th class="text-center bg-success">Realisasi</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
+                                        <?php
+                                        $no = 1;
+                                        foreach ($getInvv as $key => $gis) :
+                                            $retur = $this->report_model->inv_return($gis['invoice_id']);
+                                            $cust = $this->report_model->customer($gis['customer_id']);
+
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $no++ . '.'; ?></td>
+                                                <td>
+                                                    <?php echo date('Y-M-d', strtotime($gis['date'])); ?>
+                                                </td>
+                                                <td>
+                                                    <b> <?php echo $gis['invoice']; ?></b>
+                                                </td>
+                                                <td>
+                                                    <?php echo $cust->customer_name; ?>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span style="float: left;">Rp.</span> <?php echo number_format($gis['total_amount'], 0, ',', '.'); ?>
+                                                </td>
+                                                <td class="text-right">
+
+                                                    <span style="float: left;">Rp.</span> <?php echo number_format($retur->net_total_amount, 0, ',', '.'); ?>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span style="float: left;">Rp.</span><?php echo number_format($gis['paid_amount'], 0, ',', '.'); ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-center bg-danger"><b>Total</b></td>
+                                            <td>total</td>
+                                            <td>total</td>
+                                            <td>total</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             <?php endforeach; ?>
                         </div>

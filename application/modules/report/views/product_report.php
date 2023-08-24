@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="table-responsive paddin5ps">
-                        <table class="table table-bordered table-striped table-hover">
+                        <table class="table table-bordered table-striped table-hover datatable">
                             <thead>
                                 <tr>
                                     <th><?php echo display('sales_date') ?></th>

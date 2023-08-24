@@ -729,4 +729,39 @@ class Report_model extends CI_Model
         $query = $this->db->query('select id.*,sum(id.quantity) as tot_quantity,i.sales_by,i.date from invoice_details id left join invoice i on i.invoice_id=id.invoice_id where id.product_id="' . $sku . '" ' . $where . ' and i.sales_by=' . $sales_id . '');
         return $query->row();
     }
+
+    public function get_target_invoice($sales_id = '', $from = '', $to = '')
+    {
+        $this->db->select('*');
+        $this->db->from('invoice');
+        if ($sales_id) {
+            $this->db->where('sales_by', $sales_id);
+        }
+        if ($from) {
+            $this->db->where('date >=', $from);
+        }
+        if ($to) {
+            $this->db->where('date <=', $to);
+        }
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+    public function inv_return($invoice_id = '')
+    {
+        $this->db->select('*');
+        $this->db->where('invoice_id', $invoice_id);
+        $query = $this->db->get('product_return');
+
+        return $query->row();
+    }
+    public function customer($customer_id = '')
+    {
+        $this->db->select('*');
+        $this->db->where('customer_id', $customer_id);
+        $query = $this->db->get('customer_information');
+
+        return $query->row();
+    }
 }
