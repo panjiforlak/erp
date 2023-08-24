@@ -447,6 +447,27 @@ class Report_model extends CI_Model
         }
         return false;
     }
+    public function retrieve_product_sales_market_report($from_date, $to_date, $product_id)
+    {
+        $this->db->group_by('a.product_id');
+        $this->db->group_by('d.address2');
+        $this->db->select("a.*,sum(a.quantity) as tot_quantity,b.product_name,b.unit,b.product_model,c.date,c.invoice,c.total_amount,d.address2");
+        $this->db->from('invoice_details a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id');
+        $this->db->where('c.date >=', $from_date);
+        $this->db->where('c.date <=', $to_date);
+        if ($product_id) {
+            $this->db->where('a.product_id', $product_id);
+        }
+        $this->db->order_by('c.date', 'desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
 
     public function product_list()
     {

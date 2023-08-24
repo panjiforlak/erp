@@ -154,61 +154,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    <hr>
-                    <div class="paddin5ps">
-                        <table class="print-table" width="100%">
 
-                            <tr>
-                                <td></td>
-                                <td align="left" class="print-cominfo">
-
-                                    <strong>Laporan Penjualan (By Pasar)</strong>
-                                </td>
-
-                                <td align="right" class="print-table-tr">
-                                    <date>
-                                        <?php echo display('date') ?>: <?php echo date('d-M-Y'); ?>
-                                    </date>
-
-                                </td>
-                            </tr>
-
-                        </table>
-                    </div>
-                    <div class="table-responsive paddin5ps col-md-8">
-                        <table class="table table-bordered table-striped table-hover datatable">
-                            <thead>
-                                <tr>
-                                    <th><?php echo display('sales_date') ?></th>
-                                    <th><?php echo display('customer_name') ?></th>
-                                    <th><?php echo display('product_name') ?></th>
-
-                                    <th><?php echo display('quantity') ?></th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($product_report_market) {
-                                    foreach ($product_report_market as $reporst) {
-                                ?>
-
-                                        <tr>
-                                            <td><?php echo $reporst['sales_date'] ?></td>
-                                            <td><?php echo $reporst['address2'] ?></td>
-                                            <td><?php echo $reporst['product_name'] ?></td>
-                                            <td><?php echo number_format($reporst['tot_quantity'], 0) . ' ' . $reporst['unit'] ?></td>
-
-                                        </tr>
-
-                                <?php
-                                    }
-                                }
-                                ?>
-                            </tbody>
-
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>

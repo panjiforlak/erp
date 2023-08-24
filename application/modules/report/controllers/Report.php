@@ -428,12 +428,21 @@ class Report extends MX_Controller
         $to_date = (!empty($this->input->get('to_date')) ? $this->input->get('to_date') : date('Y-m-d'));
         $product_id = (!empty($this->input->get('product_id')) ? $this->input->get('product_id') : '');
         $product_report = $this->report_model->retrieve_product_sales_report($from_date, $to_date, $product_id);
+        $product_report_market = $this->report_model->retrieve_product_sales_market_report($from_date, $to_date, $product_id);
         $product_list = $this->report_model->product_list();
         if (!empty($product_report)) {
             $i = 0;
             foreach ($product_report as $k => $v) {
                 $i++;
                 $product_report[$k]['sl'] = $i;
+            }
+        }
+
+        if (!empty($product_report_market)) {
+            $i = 0;
+            foreach ($product_report_market as $k => $v) {
+                $i++;
+                $product_report_market[$k]['sl'] = $i;
             }
         }
         $sub_total = 0;
@@ -443,10 +452,17 @@ class Report extends MX_Controller
                 $sub_total = $sub_total + $product_report[$k]['total_amount'];
             }
         }
+        if (!empty($product_report_market)) {
+            foreach ($product_report_market as $k => $v) {
+                $product_report_market[$k]['sales_date'] = $this->occational->dateConvert($product_report_market[$k]['date']);
+                $sub_total = $sub_total + $product_report_market[$k]['total_amount'];
+            }
+        }
         $data = array(
             'title'          => display('sales_report_product_wise'),
             'sub_total'      => number_format($sub_total, 2, '.', ','),
             'product_report' => $product_report,
+            'product_report_market' => $product_report_market,
             'product_list'   => $product_list,
             'product_id'     => $product_id,
             'from'           => $from_date,
