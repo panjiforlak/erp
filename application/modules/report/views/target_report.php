@@ -120,7 +120,7 @@
         </div>
     </div>
 </div>
-<!-- <div class="row">
+<div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
@@ -131,6 +131,7 @@
                     </span>
                 </div>
             </div>
+
             <div class="panel-body">
                 <div id="printableArea2">
                     <div class="paddin5ps">
@@ -157,52 +158,32 @@
 
                         </table>
                         <div class="table-responsive paddin5ps">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2" class="text-center" style="padding-bottom: 15px;">No</th>
-                                        <th rowspan="2" width='200' style="padding-bottom: 15px;" class="text-center">Pelanggan</th>
-
-                                        <?php foreach ($get_sales as $key => $gs) : ?>
+                            <?php foreach ($get_sales as $key => $gs) : ?>
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
                                             <th colspan="4" class="text-center"><?php echo $gs['first_name'] ?></th>
-                                        <?php endforeach; ?>
+                                        </tr>
+                                        <tr>
 
-                                    </tr>
-                                    <tr>
-                                        <?php foreach ($get_sales as $key => $gs) : ?>
                                             <th class="text-center bg-info">Invoice</th>
                                             <th class="text-center bg-warning">Penjualan</th>
                                             <th class="text-center bg-danger">Retur</th>
                                             <th class="text-center bg-success">Realisasi</th>
-                                        <?php endforeach; ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $no = 1;
-                                    foreach ($get_customer_invoice_group as $key => $val) : ?>
-                                        <tr>
-                                            <td><?php echo $no++ . '.'; ?></td>
-                                            <td><?php echo $val['customer_name']; ?></td>
-                                            <?php foreach ($get_sales as $gs) : ?>
 
-                                                <?php
-                                                $get = $this->report_model->get_invoice_bysalesid($val['customer_id'], $gs['user_id']);
-                                                $ret = $this->report_model->get_invoice_retur($get->invoice_id);
-                                                ?>
-                                                <td>
-                                                    <?php echo $get->invoice; ?></td>
-                                                <td class="text-right"><span style="float: left;">Rp.</span><?php echo number_format($get->total_amount, 0, ',', '.'); ?></td>
-                                                <td class="text-right"><span style="float: left;">Rp.</span><?php echo number_format($ret->net_total_amount, 0, ',', '.'); ?></td>
-                                                <td class="text-right"><span style="float: left;">Rp.</span><?php echo number_format($get->paid_amount, 0, ',', '.'); ?></td>
-                                            <?php endforeach; ?>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div> -->
+</div>
