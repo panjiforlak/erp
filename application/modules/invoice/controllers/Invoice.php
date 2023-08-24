@@ -687,8 +687,9 @@ class Invoice extends MX_Controller
     public function japasys_manual_sales_insert()
     {
 
+
         $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[15]');
-        $this->form_validation->set_rules('invoice_no', display('invoice_no'), 'required|max_length[20]|is_unique[invoice.invoice]');
+        // $this->form_validation->set_rules('invoice_no', display('invoice_no'), 'required|max_length[20]|is_unique[invoice.invoice]');
         $this->form_validation->set_rules('product_id[]', display('product'), 'required|max_length[20]');
         $this->form_validation->set_rules('multipaytype[]', display('payment_type'), 'required');
         $this->form_validation->set_rules('product_quantity[]', display('quantity'), 'required|max_length[20]');

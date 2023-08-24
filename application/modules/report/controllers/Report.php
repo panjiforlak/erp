@@ -171,6 +171,8 @@ class Report extends MX_Controller
     {
         $stoday = date('F');
         $gyear = date('Y');
+        $sttoday = date('Y-m-01');
+        $edtoday = date('Y-m-t');
 
         $from_date = $this->input->get('from_date');
         $to_date  = $this->input->get('to_date');
@@ -182,6 +184,7 @@ class Report extends MX_Controller
         $data['period_name'] = $stoday;
         $data['period_id'] = $gperiod[0]['id'];
         $data['get_sales'] = $this->report_model->get_sales();
+        $data['get_sales_target'] = $this->report_model->get_sales_target($from_date ? $from_date : $sttoday, $to_date ? $to_date : $edtoday);
         $data['get_target_product_group']   = $this->report_model->get_target_product_group($gperiod[0]['id'], $from_date, $to_date);
         $data['get_target_product']   = $this->report_model->get_target_product($gperiod[0]['id']);
         $data['module']   = "report";

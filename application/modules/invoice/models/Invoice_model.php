@@ -549,6 +549,20 @@ class Invoice_model extends CI_Model
         $this->db->where('invoice_id', $invoice_id);
         $this->db->delete("invoice");
     }
+    public function number_generator()
+    {
+        $this->db->select_max('invoice', 'invoice_no');
+        $query      = $this->db->get('invoice');
+        $result     = $query->result_array();
+        $invoice_no = $result[0]['invoice_no'];
+        if ($invoice_no != '') {
+            $invoice_no = substr($invoice_no, 16) + 1;
+        } else {
+            $invoice_no = 1000;
+        }
+        return 'INV/SO/' . date('Ymd') . '/' . $invoice_no;
+    }
+
     public function invoice_entry()
     {
         $tablecolumn         = $this->db->list_fields('tax_collection');
@@ -560,7 +574,7 @@ class Invoice_model extends CI_Model
         $product_id          = $this->input->post('product_id');
         $currency_details    = $this->db->select('*')->from('web_setting')->get()->result_array();
         $quantity            = $this->input->post('product_quantity', TRUE);
-        $invoice_no_generated = $this->input->post('invoic_no');
+        $invoice_no_generated = $this->number_generator();
         $changeamount        = $this->input->post('change', TRUE);
         $multipayamount      = $this->input->post('pamount_by_method', TRUE);
         $multipaytype        = $this->input->post('multipaytype', TRUE);
@@ -630,7 +644,7 @@ class Invoice_model extends CI_Model
             'due_date'        => (!empty($this->input->post('due_date', TRUE)) ? $this->input->post('due_date', TRUE) : date('Y-m-d')), // perubahan : penambahan field due_date
             'total_amount'    => $this->input->post('grand_total_price', TRUE),
             'total_tax'       => $this->input->post('total_tax', TRUE),
-            'invoice'         => $this->input->post('invoice_no', TRUE),
+            'invoice'         => $this->number_generator(),
             'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : 'Terimakasih telah berbelanja di tempat kami'),
             'invoice_discount' => $this->input->post('invoice_discount', TRUE),
             'total_discount'  => $this->input->post('total_discount', TRUE),
@@ -669,7 +683,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  111000001,
-            'Narration'      =>  'Cash in Hand in Sale for Invoice No - ' . $invoice_no_generated . ' customer- ' . $cusifo->customer_name,
+            'Narration'      =>  'Cash in Hand in Sale for ' . $invoice_no_generated . ' customer- ' . $cusifo->customer_name,
             'Debit'          =>  $paidamount,
             'Credit'         =>  0,
             'IsPosted'       =>  1,
@@ -684,7 +698,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  $bankcoaid,
-            'Narration'      =>  'Paid amount for customer  Invoice No - ' . $invoice_no_generated . ' customer -' . $cusifo->customer_name,
+            'Narration'      =>  'Paid amount for ' . $invoice_no_generated . ' customer -' . $cusifo->customer_name,
             'Debit'          =>  $paidamount,
             'Credit'         =>  0,
             'IsPosted'       =>  1,
@@ -699,7 +713,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  1141,
-            'Narration'      =>  'Inventory credit For Invoice No' . $invoice_no_generated,
+            'Narration'      =>  'Inventory credit For ' . $invoice_no_generated,
             'Debit'          =>  0,
             'Credit'         =>  $sumval, //purchase price asbe
             'IsPosted'       => 1,
@@ -716,7 +730,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  $customer_headcode,
-            'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
+            'Narration'      =>  'Customer debit For ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
             'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
             'Credit'         =>  0,
             'IsPosted'       => 1,
@@ -735,7 +749,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  511001,
-            'Narration'      =>  'Product Sales revenue For Invoice NO - ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
+            'Narration'      =>  'Product Sales revenue For ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
             'Debit'          =>  0,
             'Credit'         =>  $income,
             'IsPosted'       => 1,
@@ -750,7 +764,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  2114,
-            'Narration'      =>  'Value added tax For Invoice NO - ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
+            'Narration'      =>  'Value added tax For ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
             'Debit'          =>  0,
             'Credit'         =>  $paid_tax,
             'IsPosted'       => 1,
@@ -767,7 +781,7 @@ class Invoice_model extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $createdate,
             'COAID'          =>  $customer_headcode,
-            'Narration'      =>  'Customer credit for Paid Amount For Customer Invoice NO- ' . $invoice_no_generated . ' Customer- ' . $cusifo->customer_name,
+            'Narration'      =>  'Customer credit for Paid Amount For ' . $invoice_no_generated . ' Customer- ' . $cusifo->customer_name,
             'Debit'          =>  0,
             'Credit'         =>  $paidamount,
             'IsPosted'       => 1,
@@ -790,7 +804,7 @@ class Invoice_model extends CI_Model
                     'Vtype'          =>  'INVOICEPayment',
                     'VDate'          =>  $createdate,
                     'COAID'          =>  $multipaytype,
-                    'Narration'      =>  'Paid amount for customer  Invoice No - ' . $invoice_no_generated . ' customer -' . $cusifo->customer_name,
+                    'Narration'      =>  'Paid amount for ' . $invoice_no_generated . ' customer -' . $cusifo->customer_name,
                     'Debit'          =>  $multipayamount[$i],
                     'Credit'         =>  0,
                     'IsPosted'       =>  1,

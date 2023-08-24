@@ -764,4 +764,23 @@ class Report_model extends CI_Model
 
         return $query->row();
     }
+    public function get_sales_target($from = '', $to = '')
+    {
+
+        $this->db->select('ta.sales_id,ta.*,tp.start_date,tp.end_date,u.first_name');
+        $this->db->from('target_amount ta');
+        $this->db->join('target_period tp', 'tp.id = ta.period_id', 'left');
+        $this->db->join('users u', 'u.user_id = ta.sales_id', 'left');
+        $this->db->where('u.status', '1');
+        if ($from) {
+            $this->db->where('tp.start_date <=', $from);
+        }
+        if ($to) {
+            $this->db->where('tp.end_date >=', $to);
+        }
+        $this->db->order_by('u.first_name', 'ASC');
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
 }
