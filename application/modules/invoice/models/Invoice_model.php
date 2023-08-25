@@ -433,7 +433,7 @@ class Invoice_model extends CI_Model
             $button .= '  <a href="' . $base_url . 'inv_delete/' . $record->invoice_id . '/' . number_format($record->total_amount, 0, '.', '') . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('cancel') . '"><i class="fa fa-times" aria-hidden="true"></i></a>';
 
 
-            $details = '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
+            $details = '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" target="_blank">' . $record->invoice . '</a>';
 
             $data[] = array(
                 'sl'               => $sl,
