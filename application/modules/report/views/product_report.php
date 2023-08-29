@@ -180,7 +180,7 @@
                             <thead>
                                 <tr>
                                     <th><?php echo display('sales_date') ?></th>
-                                    <th><?php echo display('customer_name') ?></th>
+                                    <th>Nama Pasar</th>
                                     <th><?php echo display('product_name') ?></th>
 
                                     <th><?php echo display('quantity') ?></th>
