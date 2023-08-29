@@ -1010,6 +1010,7 @@ $(document).ready(function () {
       { data: 'sl' },
       { data: 'customer_name' },
       { data: 'address' },
+      { data: 'address2', class: "text-success" },
       { data: 'mobile' },
       { data: 'email' },
       { data: 'city' },

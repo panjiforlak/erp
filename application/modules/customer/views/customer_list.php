@@ -17,6 +17,7 @@
                                  <th><?php echo display('sl') ?></th>
                                  <th><?php echo display('customer_name') ?></th>
                                  <th><?php echo display('address1'); ?></th>
+                                 <th>Pasar</th>
                                  <th><?php echo display('mobile_no') ?></th>
                                  <th><?php echo display('email'); ?></th>
                                  <th><?php echo display('vat_no'); ?></th>
