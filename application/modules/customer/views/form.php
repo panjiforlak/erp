@@ -88,7 +88,7 @@
 
                      </div>
 
-                     <label for="address2" class="col-sm-2 text-right col-form-label"><?php echo display('address2') ?>:</label>
+                     <label for="address2" class="col-sm-2 text-right col-form-label">Pasar:</label>
                      <div class="col-sm-4">
                          <div class="">
 
