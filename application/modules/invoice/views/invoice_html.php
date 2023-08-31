@@ -116,11 +116,11 @@
                                                 <td style="border-collapse: collapse; border:1px solid"><?php echo $invoice_data['product_name']; ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: center;"><?php echo number_format($invoice_data['quantity'], 0, '.', ',') . ' ' . $invoice_data['unit']; ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: right;"><span style="float: left;margin-left:2px;">Rp. </span><?php echo number_format($invoice_data['rate']); ?></td>
-                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per'],1); ?></td>
+                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per'], 1); ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount']); ?></td>
-                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per2'],1); ?></td>
+                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per2'], 1); ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount2']); ?></td>
-                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per3'],1); ?></td>
+                                                <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount_per3'], 1); ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: center;"><span style="float: left;margin-left:2px;"></span><?php echo number_format($invoice_data['discount3']); ?></td>
                                                 <td style="border-collapse: collapse; border:1px solid;text-align: right;"><span style="float: left;margin-left:2px;">Rp.</span><?php echo number_format($invoice_data['total_price']); ?></td>
                                             </tr>
@@ -190,7 +190,7 @@
                                             Transfer via : <br>
 
                                         </td>
-                                        <td style="width:400;font-size:8pt;">
+                                        <td style="width:400;font-size:8pt;padding-top:20px">
                                             Catatan :<br>
                                         </td>
                                     </tr>
@@ -200,19 +200,19 @@
                                                 <?php echo "<b style='margin-left:3px;font-size:9pt; font-style:italic'>- " . $b['bank_name'] . " " . $b['ac_name'] . " (" . $b['ac_number'] . ")</b>"; ?><br>
                                             <?php endforeach; ?>
                                         </td>
-                                        <td style="width:400;border-collapse:collapse;border:1px solid">
+                                        <!-- <td style="width:400;border-collapse:collapse;border:1px solid">
                                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </table>
                                 <br>
-                                <table style='width:200; font-size:7pt; border-collapse: collapse;margin-right:400px' border='1' cellspacing='2'>
+                                <table style='width:250; font-size:7pt; border-collapse: collapse;margin-right:400px' border='1' cellspacing='2'>
                                     <tr style="text-align: center;">
-                                        <td style="width:50">Penerima</td>
-                                        <td style="width:50">Pengirim</td>
-                                        <td style="width:50">Hormat Kami</td>
+                                        <td style="width:70">Penerima</td>
+                                        <td style="width:70">Pengirim</td>
+                                        <td style="width:70">Hormat Kami</td>
                                     </tr>
                                     <tr style="height: 30px;">
                                         <td></td>

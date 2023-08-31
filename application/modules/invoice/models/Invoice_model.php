@@ -397,7 +397,7 @@ class Invoice_model extends CI_Model
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
-        $this->db->select("a.*,b.customer_name,u.first_name,u.last_name");
+        $this->db->select("a.*,b.customer_name,b.address2,u.first_name,u.last_name");
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
         $this->db->join('users u', 'u.user_id = a.sales_by', 'left');
@@ -416,9 +416,21 @@ class Invoice_model extends CI_Model
         $data = array();
         $sl = 1;
 
+
         foreach ($records as $record) {
+            ## fecth detail invoice
+            $this->db->select('id.*,pi.product_name');
+            $this->db->from('invoice_details id');
+            $this->db->join('product_information pi', 'pi.product_id = id.product_id', 'left');
+            $this->db->where('invoice_id', $record->invoice_id);
+            $this->db->not_like('quantity', '-', 'both');
+            $inv_detail = $this->db->get()->result();
+
             $button = '';
             $prints = '';
+            $details = '';
+
+
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
@@ -432,8 +444,131 @@ class Invoice_model extends CI_Model
             }
             $button .= '  <a href="' . $base_url . 'inv_delete/' . $record->invoice_id . '/' . number_format($record->total_amount, 0, '.', '') . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('cancel') . '"><i class="fa fa-times" aria-hidden="true"></i></a>';
 
+            if ($record->total_amount == $record->paid_amount) {
+                $status = '<div class="badge badge-primary">Lunas</div>';
+            } else {
+                $status = '<div class="badge badge-warning">Belum Lunas</div>';
+            }
+            $total_kotor = ($record->total_amount + $record->total_discount + $record->total_tax);
+            // $details .= '  <a data-target="#exampleModalCenter" class="" target="_blank" ><i class="fa fa-print" aria-hidden="true"></i></a>';
+            $details .= ' 
+       <a class="text-danger" href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" target="_blank" ><i class="fa fa-fw fa-print" aria-hidden="true"></i>
+        </a>
+        <a type="button" class="text-primary" data-toggle="modal" data-target="#exampleModalCenter' . $record->invoice_id . '">
+            <i  class="fa fa-fw fa-search-plus" aria-hidden="true"></i>
+        </a>
+        <div class="modal fade" id="exampleModalCenter' . $record->invoice_id . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLongTitle">Details INVOICE : ' . $record->invoice . '</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Faktur </label>
+                            </div>
+                             <div class="col-md-5">
+                                : ' . $record->invoice . '
+                            </div>
+                            <div class="col-md-2">
+                                <label>Tanggal Order </label>
+                            </div>
+                             <div class="col-md-3">
+                                : ' . $record->date . '
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Pelanggan </label>
+                            </div>
+                             <div class="col-md-5">
+                                : ' . $record->customer_name . ' ( ' . $record->address2 . ' )
+                            </div>
+                            <div class="col-md-2">
+                                <label>Jatuh Tempo </label>
+                            </div>
+                             <div class="col-md-3">
+                                : ' . $record->due_date . '
+                            </div>
+                        </div>
+                  
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="text-success">Total Pesanan </label>
+                            </div>
+                             <div class="col-md-5 text-success">
+                                : <b>Rp. ' . number_format($record->total_amount, 0, ',', '.') . '</b>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Status </label>
+                            </div>
+                            <div class="col-md-3">
+                                : ' . $status . '
+                            </div>
+                        </div>
+                    
+                    <hr>
+                        <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Produk</th>
+                            <th scope="col">Harga Satuan</th>
+                            <th scope="col">Kuantitas</th>
+                            <th scope="col">Disc 1</th>
+                            <th scope="col">Disc 2</th>
+                            <th scope="col">Disc 3</th>
+                            <th scope="col">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>';
+            $no = 1;
+            foreach ($inv_detail as $idet) {
+                $details .=
+                    '<tr>
+                <th scope="row">' . $no++ . '.</th>
+                <td>' . $idet->product_name . '</td>
+                <td class="text-right"><span style="float:left">Rp. </span>' . number_format($idet->rate, 0, ',', '.') . '</td>
+                <td class="text-center">' . number_format($idet->quantity, 0, ',', '.') . $idet->unit . '</td>
+                <td class="text-center">' . number_format($idet->discount_per, 0, ',', '.') . ' %</td>
+                <td class="text-center">' . number_format($idet->discount_per2, 0, ',', '.') . ' %</td>
+                <td class="text-center">' . number_format($idet->discount_per3, 0, ',', '.') . ' %</td>
+                <td class="text-right"><span style="float:left">Rp. </span>' . number_format($idet->total_price, 0, ',', '.') . '</td>
+                </tr>';
+            }
 
-            $details = '  <a href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" target="_blank">' . $record->invoice . '</a>';
+            $details .= '
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="7" class="text-right">Total Diskon</td>
+                <td class="text-right"><span style="float:left">Rp. </span>(' . number_format($record->total_discount, 0, ',', '.') . ')</td>
+            </tr>
+            <tr>
+                <td colspan="7" class="text-right">Total PPN</td>
+                <td class="text-right"><span style="float:left">Rp. </span>' . number_format($record->total_tax, 0, ',', '.') . '</td>
+            </tr>
+            <tr class="bg-success">
+                <td colspan="7" class="text-right"><b>Total</b></td>
+                <td class="text-right"><b><span style="float:left">Rp. </span>' . number_format($record->total_amount, 0, ',', '.') . '</b></td>
+            </tr>
+            </tfoot>
+                      </table>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <a href="' . $base_url . '/invoice_details/' . $record->invoice_id . '"target="_blank" type="button" class="btn btn-primary">Cetak</a>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+       ';
+
+            $details .= '  <span style="font-weight:bold" href="' . $base_url . 'invoice_details/' . $record->invoice_id . '" class="" target="_blank" >' . $record->invoice . '</span>';
 
             $data[] = array(
                 'sl'               => $sl,
