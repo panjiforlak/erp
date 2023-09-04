@@ -801,7 +801,7 @@ class Invoice extends MX_Controller
             'invoice_discount' => $invoice_detail[0]['invoice_discount'],
             'total_discount'  => $invoice_detail[0]['total_discount'],
             'total_vat_amnt'  => $invoice_detail[0]['total_vat_amnt'],
-            'sales_by'  => $invoice_detail[0]['sales_by'],
+            'sales_by'        => $invoice_detail[0]['sales_by'],
             'unit'            => $invoice_detail[0]['unit'],
             'tax'             => $invoice_detail[0]['tax'],
             'taxes'           => $taxfield,

@@ -58,15 +58,15 @@ function addInputField_invoice(t) {
             count + "' value='0' readonly='readonly' /></td><td><input class='form-control text-right common_name unit_" + count +
             " valid' value='None' readonly='' aria-invalid='false' type='text'></td><td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='japasys_invoice_quantity_calculate(" +
             count + ");' onchange='japasys_invoice_quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" +
-            count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/></td><td><input type='text' name='product_rate[]' onkeyup='japasys_invoice_quantity_calculate(" +
+            count + " form-control text-right'  placeholder='0' min='0' tabindex='" + tab3 + "'/></td><td><input type='text' name='product_rate[]' onkeyup='japasys_invoice_quantity_calculate(" +
             count + ");' onchange='japasys_invoice_quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" +
-            count + " form-control text-right' required placeholder='0.00' min='0' tabindex='" + tab4 + "'/></td><td><input type='text' name='discount[]' onkeyup='japasys_invoice_quantity_calculate("
-            + count + ");' onchange='japasys_invoice_quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 +
+            count + " form-control text-right' required placeholder='0' min='0' tabindex='" + tab4 + "'/></td><td><input type='text' name='discount[]' onkeyup='japasys_invoice_quantity_calculate("
+            + count + ");' onchange='japasys_invoice_quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.0' min='0' tabindex='" + tab5 +
             "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td><td><input type='text' name='discountvalue[]'  id='discount_value_" + count +
-            "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab13 + "' readonly /></td><td><input type='text' name='vatpercent[]'  id='vat_percent_" + count +
+            "' class='form-control text-right common_discount' placeholder='0.0' min='0' tabindex='" + tab13 + "' readonly /></td><td><input type='text' name='vatpercent[]'  id='vat_percent_" + count +
             "' onkeyup='japasys_invoice_quantity_calculate(" + count + ");' onchange='japasys_invoice_quantity_calculate(" + count + ");' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab14 +
             "'  /></td><td><input type='text' name='vatvalue[]'  id='vat_value_" + count +
-            "' class='form-control text-right common_discount total_vatamnt' placeholder='0.00' min='0' tabindex='" + tab15 +
+            "' class='form-control text-right common_discount total_vatamnt' placeholder='0.0' min='0' tabindex='" + tab15 +
             "' readonly /></td><td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" +
             count + "' value='0.00' readonly='readonly'/></td><td>" + tbfild + "<input type='hidden' id='all_discount_" + count
             + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 +
@@ -286,13 +286,14 @@ function japasys_invoice_quantity_calculate(item) {
                     }
                 } else {
                     $("#discount_value3_" + item).val(0);
-                    $("#total_price_" + item).val(temp2);
+                    $("#total_price_" + item).val(temp2.toFixed(0));
                     $("#all_discount3_" + item).val(0);
                 }
             } else {
                 $("#discount_value2_" + item).val(0);
-                $("#total_price_" + item).val(temp);
+                $("#total_price_" + item).val(temp.toFixed(0));
                 $("#all_discount2_" + item).val(0);
+
             }
 
         } else if (dis_type == 2) {
@@ -316,6 +317,7 @@ function japasys_invoice_quantity_calculate(item) {
                 var tax = (temp) * $("#total_tax" + i + "_" + item).val();
                 ttletax += Number(tax);
                 $("#all_tax" + i + "_" + item).val(tax);
+
             }
         } else if (dis_type == 3) {
             var total_price = quantity * price_item;
@@ -343,6 +345,7 @@ function japasys_invoice_quantity_calculate(item) {
         var c = quantity * price_item * total_tax;
         $("#total_price_" + item).val(n),
             $("#all_tax_" + item).val(c)
+
     }
     invoice_calculateSum();
     var invoice_edit_page = $("#invoice_edit_page").val();
@@ -367,10 +370,11 @@ function japasys_invoice_quantity_calculate(item) {
 
 
                 $('#add_new_payment').append(data);
-
-                $("#pamount_by_method").val(gtotal);
+                $("#paidAmount").val(0);
+                $("#dueAmmount").val(gtotal);
+                $("#pamount_by_method").val(0);
                 $("#preload_pay_view").val('1');
-                $("#add_new_payment_type").prop('disabled', false);
+                $("#add_new_payment_type").prop('disabled', true);
                 var card_typesl = $('.card_typesl').val();
                 if (card_typesl == 0) {
                     $("#add_new_payment_type").prop('disabled', true);
@@ -400,30 +404,32 @@ function invoice_calculateSum() {
         s_cost = $("#shipping_cost").val();
 
     //Total Tax
+
     for (var i = 0; i < taxnumber; i++) {
 
         var j = 0;
+
         $(".total_tax" + i).each(function () {
             isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
         });
-        $("#total_tax_ammount" + i).val(j.toFixed(0, 2));
+        $("#total_tax_ammount" + i).val(j.toFixed(0));
 
     }
     //Total Discount
     $(".total_discount").each(function () {
         isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
     }),
-        $("#total_discount_ammount").val(p.toFixed(0, 2)),
+        $("#total_discount_ammount").val(p.toFixed(0)),
 
         $(".total_vatamnt").each(function () {
             isNaN(this.value) || 0 == this.value.length || (v += parseFloat(this.value))
         }),
-        $("#total_vat_amnt").val(v.toFixed(0, 2)),
+        $("#total_vat_amnt").val(v.toFixed(0)),
 
         $(".totalTax").each(function () {
             isNaN(this.value) || 0 == this.value.length || (f += parseFloat(this.value))
         }),
-        $("#total_tax_amount").val(f.toFixed(0, 2)),
+        $("#total_tax_amount").val(f.toFixed(0)),
 
         //Total Price
         $(".total_price").each(function () {
@@ -434,13 +440,13 @@ function invoice_calculateSum() {
             isNaN(this.value) || 0 == this.value.length || (ad += parseFloat(this.value))
         }),
 
-        o = a.toFixed(0, 2),
-        e = t.toFixed(0, 2),
-        tx = f.toFixed(0, 2),
-        ds = p.toFixed(0, 2);
+        o = a.toFixed(0),
+        e = t.toFixed(0),
+        tx = f.toFixed(0),
+        ds = p.toFixed(0);
 
     var test = +tx + +s_cost + +e + -ds + + ad;
-    $("#grandTotal").val(test.toFixed(0, 2));
+    $("#grandTotal").val(test.toFixed(0));
 
 
     var gt = $("#grandTotal").val();
@@ -451,10 +457,10 @@ function invoice_calculateSum() {
 
     var total_discount_ammount = $("#total_discount_ammount").val();
     var ttl_discount = +total_discount_ammount;
-    $("#total_discount_ammount").val(ttl_discount.toFixed(0, 2));
+    $("#total_discount_ammount").val(ttl_discount.toFixed(0));
     var grnt_totals = parseFloat(gt) + parseFloat(vatamnt);
 
-    $("#grandTotal").val(grnt_totals.toFixed(0, 2));
+    $("#grandTotal").val(grnt_totals.toFixed(0));
     $('#paidAmount').val(grnt_totals);
     $("#pamount_by_method").val(grnt_totals);
     // invoice_paidamount();
@@ -469,7 +475,7 @@ function invoice_calculateSum() {
     var t = $("#grandTotal").val(),
         nt = parseFloat(t, 10) + pr,
         ls = parseFloat(l - nt);
-    $("#n_total").val(nt.toFixed(0, 2));
+    $("#n_total").val(nt.toFixed(0));
     $("#limits").val(ls);
     if (ls < 0) {
         $("#add_invoice").prop('disabled', true);
@@ -536,7 +542,7 @@ $(document).on('click', '#add_new_payment_type', function () {
             var nextamnt = gtotal - total3;
 
 
-            $(".number:eq(" + (length - 1) + ")").val(nextamnt.toFixed(0, 2));
+            $(".number:eq(" + (length - 1) + ")").val(nextamnt.toFixed(0));
             var total2 = 0;
             $(".number").each(function () {
                 total2 += parseFloat($(this).val()) || 0;
@@ -599,9 +605,9 @@ function invoice_paidamount() {
     $("#add_new_payment").empty();
     $("#pay-amount").text('0');
 
-    $("#n_total").val(nt.toFixed(0, 2));
+    $("#n_total").val(nt.toFixed(0));
     if (e > 0) {
-        $("#dueAmmount").val(e.toFixed(0, 2));
+        $("#dueAmmount").val(e.toFixed(0));
         if (a <= f) {
             $("#change").val(0);
         }
@@ -610,7 +616,7 @@ function invoice_paidamount() {
             $("#change").val(0);
         }
         if (a > f) {
-            $("#change").val(d.toFixed(0, 2))
+            $("#change").val(d.toFixed(0))
         }
         $("#dueAmmount").val(0)
     }
@@ -729,9 +735,12 @@ function deleteRow_invoice(t) {
                 url: url,
                 data: { csrf_test_name: csrf_test_name, is_credit_edit: is_credit_edit },
                 success: function (data) {
-                    $('#add_new_payment').append(data);
-                    $("#pamount_by_method").val(gtotal);
-                    $("#add_new_payment_type").prop('disabled', false);
+                    // $('#add_new_payment').append(data);
+                    $("#dueAmmount").val(gtotal);
+                    $("#paidAmount").val(0);
+                    // $("#total_tax_amount").val(f.toFixed(0)); harus diedit untuk total tax
+                    $("#pamount_by_method").val(0);
+                    $("#add_new_payment_type").prop('disabled', true);
                 }
             });
 
@@ -1086,7 +1095,7 @@ function invoice_product_batch(sl) {
         },
         success: function (data) {
             if (parseInt(data) >= 0) {
-                $(".available_quantity_" + sl).val(data.toFixed(0, 2));
+                $(".available_quantity_" + sl).val(data.toFixed(0));
             } else {
                 var message = "You can Sale maximum " + available_quantity + " Items";
                 toastr["error"](message);
@@ -1143,7 +1152,7 @@ function check_creditsale() {
             data: { csrf_test_name: csrf_test_name, is_credit_edit: is_credit_edit },
             success: function (data) {
                 $('#add_new_payment').append(data);
-                $("#pamount_by_method").val(gtotal);
+                $("#pamount_by_method").val(0);
                 $("#add_new_payment_type").prop('disabled', true);
             }
         });

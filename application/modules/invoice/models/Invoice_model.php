@@ -439,8 +439,12 @@ class Invoice_model extends CI_Model
             $prints .= '  <a href="' . $base_url . 'invoice_pad_print/' . $record->invoice_id . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pad_print') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
             $prints .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
-            if ($this->permission1->method('manage_invoice', 'update')->access()) {
-                $button .= ' <a href="' . $base_url . 'invoice_edit/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
+            if ($record->paid_amount == $record->total_amount) {
+                $button .= ' <a href="javascript:void(0)" class="btn btn-info btn-sm" data-toggle="tooltip" disabled data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
+            } else {
+                if ($this->permission1->method('manage_invoice', 'update')->access()) {
+                    $button .= ' <a href="' . $base_url . 'invoice_edit/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
+                }
             }
             $button .= '  <a href="' . $base_url . 'inv_delete/' . $record->invoice_id . '/' . number_format($record->total_amount, 0, '.', '') . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('cancel') . '"><i class="fa fa-times" aria-hidden="true"></i></a>';
 
@@ -1109,7 +1113,7 @@ class Invoice_model extends CI_Model
             'invoice_discount' => $this->input->post('invoice_discount', TRUE),
             'total_discount'  => $this->input->post('total_discount', TRUE),
             'total_vat_amnt'  => $this->input->post('total_vat_amnt', TRUE),
-            'total_tax'  => $this->input->post('total_vat_amnt', TRUE), //perubahan : sebelumnya baris ini tidak ada
+            // 'total_tax'       => $this->input->post('total_vat_amnt', TRUE), //perubahan : sebelumnya baris ini tidak ada
             'prevous_due'     => $this->input->post('previous', TRUE),
             'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
             'payment_type'    =>  $this->input->post('paytype', TRUE),
@@ -1296,8 +1300,13 @@ class Invoice_model extends CI_Model
         $p_id          = $this->input->post('product_id', TRUE);
         $total_amount  = $this->input->post('total_price', TRUE);
         $discount_rate = $this->input->post('discountvalue', TRUE);
+        $discount_rate2 = $this->input->post('discountvalue2', TRUE);
+        $discount_rate3 = $this->input->post('discountvalue3', TRUE);
         $discount_per  = $this->input->post('discount', TRUE);
+        $discount_per2  = $this->input->post('discount2', TRUE);
+        $discount_per3  = $this->input->post('discount3', TRUE);
         $vat_amnt      = $this->input->post('vatvalue', TRUE);
+        $tax      = $this->input->post('tax', TRUE);
         $vat_amnt_pcnt = $this->input->post('vatpercent', TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
         $this->db->where('invoice_id', $invoice_id);
@@ -1311,9 +1320,14 @@ class Invoice_model extends CI_Model
             $total_price      = $total_amount[$i];
             $supplier_rate    = $this->supplier_price($product_id);
             $discount         = $discount_rate[$i];
+            $discount2         = $discount_rate2[$i];
+            $discount3         = $discount_rate3[$i];
             $vatper           = $vat_amnt_pcnt[$i];
             $vatanmt          = $vat_amnt[$i];
+            $taxpercentage          = $tax[$i];
             $dis_per          = $discount_per[$i];
+            $dis_per2          = $discount_per2[$i];
+            $dis_per3          = $discount_per3[$i];
             $desciption        = $invoice_description[$i];
             if (!empty($tax_amount[$i])) {
                 $tax = $tax_amount[$i];
@@ -1331,9 +1345,13 @@ class Invoice_model extends CI_Model
                 'quantity'           => $product_quantity,
                 'rate'               => $product_rate,
                 'discount'           => $discount,
+                'discount2'           => $discount2,
+                'discount3'           => $discount3,
                 'total_price'        => $total_price,
                 'discount_per'       => $dis_per,
-                'tax'                => $this->input->post('total_tax', TRUE),
+                'discount_per2'       => $dis_per2,
+                'discount_per3'       => $dis_per3,
+                'tax'                => $taxpercentage,
                 'vat_amnt'           => $vatanmt,
                 'vat_amnt_per'       => $vatper,
                 'paid_amount'        => $paidamount,
