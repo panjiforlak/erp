@@ -753,18 +753,21 @@ class Report_model extends CI_Model
 
     public function get_target_invoice($sales_id = '', $from = '', $to = '')
     {
-        $this->db->select('*');
-        $this->db->from('invoice');
+        $this->db->select('i.*,sum(at.debit)as tot_debit,at.VNo,at.VDate,at.Vtype,at.debit');
+        $this->db->from('acc_transaction at');
+        $this->db->join('invoice i', 'at.VNo=i.invoice_id', 'left');
         if ($sales_id) {
-            $this->db->where('sales_by', $sales_id);
+            $this->db->where('i.sales_by', $sales_id);
         }
         if ($from) {
-            $this->db->where('date >=', $from);
+            $this->db->where('at.VDate >=', $from);
         }
         if ($to) {
-            $this->db->where('date <=', $to);
+            $this->db->where('at.VDate <=', $to);
         }
-        $this->db->order_by('id', 'DESC');
+        $this->db->where('at.Vtype', 'INVOICEPayment');
+        $this->db->order_by('i.id', 'DESC');
+        $this->db->group_by('i.id');
         $query = $this->db->get();
 
         return $query->result_array();
@@ -803,5 +806,27 @@ class Report_model extends CI_Model
         $query = $this->db->get();
 
         return $query->result_array();
+    }
+    public function get_sales_target_bysalesid($from = '', $to = '', $sales_id = '')
+    {
+
+        $this->db->select('ta.sales_id,ta.*,tp.start_date,tp.end_date,u.first_name');
+        $this->db->from('target_amount ta');
+        $this->db->join('target_period tp', 'tp.id = ta.period_id', 'left');
+        $this->db->join('users u', 'u.user_id = ta.sales_id', 'left');
+        $this->db->where('u.status', '1');
+        if ($from) {
+            $this->db->where('tp.start_date <=', $from);
+        }
+        if ($to) {
+            $this->db->where('tp.end_date >=', $to);
+        }
+        if ($to) {
+            $this->db->where('ta.sales_id', $sales_id);
+        }
+        $this->db->order_by('u.first_name', 'ASC');
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }

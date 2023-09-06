@@ -80,6 +80,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 <?php if ($get_target_product_group) : ?>
                                     <?php $no = 1;
                                     foreach ($get_target_product_group as $key => $val) : ?>
@@ -158,18 +159,19 @@
 
                         </table>
                         <div class="table-responsive paddin5ps">
+
                             <?php if ($get_sales_target) : ?>
                                 <?php foreach ($get_sales_target as $key => $gs) : ?>
-                                    <?php $getInvv = $this->report_model->get_target_invoice($gs['sales_id'], $from_date ? $from_date : $stoday, $to_date ? $to_date : $today); ?>
+                                    <?php $getInvv = $this->report_model->get_target_invoice($gs['sales_id'], $from_date ? $from_date : $stoday, $to_date ? $to_date : $today);
+                                    $getAmount = $this->report_model->get_sales_target_bysalesid($from_date ? $from_date : $stoday, $to_date ? $to_date : $today, $gs['sales_id']);
+                                    ?>
 
-
-                                    <table class="table table-bordered table-striped table-hover">
+                                    <table class="table table-bordered table-striped table-hover" id="tabAmount">
                                         <thead>
                                             <tr>
                                                 <th colspan="7" class="text-left bg-primary" style="padding-top: 10px;padding-bottom: 10px;padding-left: 10px;"><?php echo strtoupper($gs['first_name']); ?></th>
                                             </tr>
                                             <tr>
-
                                                 <th class="text-center ">No</th>
                                                 <th class="text-center ">Invoice Date</th>
                                                 <th class="text-center ">Invoice</th>
@@ -183,10 +185,18 @@
                                         <tbody>
                                             <?php
                                             $no = 1;
+                                            $sumTarget = 0;
+                                            $sumRetur = 0;
+                                            $sumRealisasi = 0;
+
                                             foreach ($getInvv as $key => $gis) :
+
                                                 $retur = $this->report_model->inv_return($gis['invoice_id']);
                                                 $cust = $this->report_model->customer($gis['customer_id']);
-
+                                                $sumTarget += $gis['total_amount'];
+                                                $sumRetur += $retur->net_total_amount;
+                                                $sumRealisasi += $gis['tot_debit'];
+                                                $arrtarget = array_unique($gis['total_amount'])
                                             ?>
                                                 <tr>
                                                     <td><?php echo $no++ . '.'; ?></td>
@@ -200,25 +210,61 @@
                                                         <?php echo $cust->customer_name; ?>
                                                     </td>
                                                     <td class="text-right">
-                                                        <span style="float: left;">Rp.</span> <?php echo number_format($gis['total_amount'], 0, ',', '.'); ?>
+                                                        <span style="float: left;">Rp.</span>
+                                                        <?php echo number_format($gis['total_amount'], 0, ',', '.'); ?>
+
                                                     </td>
                                                     <td class="text-right">
 
                                                         <span style="float: left;">Rp.</span> <?php echo number_format($retur->net_total_amount, 0, ',', '.'); ?>
+
+
                                                     </td>
                                                     <td class="text-right">
-                                                        <span style="float: left;">Rp.</span><?php echo number_format($gis['paid_amount'], 0, ',', '.'); ?>
+                                                        <span style="float: left;">Rp.</span><?php echo number_format($gis['tot_debit'], 0, ',', '.'); ?>
+
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                         <tfoot>
+                                            <?php $pencapaian = $sumRealisasi - $sumRetur; ?>
                                             <tr>
                                                 <td colspan="4" class="text-center bg-danger"><b>Total</b></td>
-                                                <td>total</td>
-                                                <td>total</td>
-                                                <td>total</td>
+                                                <td class="text-right bg-danger" style="text-decoration-line: underline;  text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php echo number_format($sumTarget, 0, ',', '.'); ?></b></td>
+                                                <td class="text-right bg-danger" style="text-decoration-line: underline;  text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php echo number_format($sumRetur, 0, ',', '.'); ?></b></td>
+                                                <td class="text-right bg-danger" style="text-decoration-line: underline;  text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php echo number_format($sumRealisasi, 0, ',', '.'); ?></b></td>
+
+
                                             </tr>
+                                            <tr>
+                                                <td colspan="7"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6" class="text-right"><b>TARGET SET</b></td>
+
+
+                                                <td class="text-right bg-info" style="text-decoration-line: underline;  text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php echo number_format($getAmount->amount, 0, ',', '.'); ?></b></td>
+
+
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="6" class="text-right"><b>PENCAPAIAN</b></td>
+
+
+                                                <td class="text-right bg-success" style="text-decoration-line: underline;  text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php echo number_format($pencapaian, 0, ',', '.'); ?></b></td>
+
+
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="6" class="text-right"><b>TARGET KEKURANGAN</b></td>
+                                                <td class="text-right bg-black text-danger" style="text-decoration-line: underline; text-decoration-style: double;font-size:11pt"><b><span style="float:left">Rp.</span><?php $kekurangan = ($getAmount->amount - $pencapaian);
+                                                                                                                                                                                                                        echo number_format($kekurangan, 0, ',', '.'); ?></b></td>
+
+                                            </tr>
+
                                         </tfoot>
                                     </table>
                                 <?php endforeach; ?>
