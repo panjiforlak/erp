@@ -129,8 +129,9 @@ class Permission extends MX_Controller
             $html .= "<table id=\"dataTableExample2\" class=\"table table-bordered table-striped table-hover\">
                         <thead>
                             <tr>
-                                <th>Sl</th>
-                                <th>role_name</th>
+                                <th>#</th>
+                                <th>Role</th>
+                                <th class='text-center'>Delete</th>
                             </tr>
                         </thead>
                        <tbody>";
@@ -139,6 +140,7 @@ class Permission extends MX_Controller
                 $html .= "<tr>
                                 <td>$i</td>
                                 <td>$role->type</td>
+                                <td class='text-center'><a href='dashboard/permission/user_role_delete/$role->id' class='text-center'><i class='fa fa-fw fa-trash-o text-danger' aria-hidden='true'></i></a></td>
                             </tr>";
                 $i++;
             }
@@ -192,6 +194,18 @@ class Permission extends MX_Controller
     }
 
 
+    public function user_role_delete($id)
+    {
+
+        $role = $this->permission_model->delete_user_role($id);
+
+        if ($role) {
+            $this->session->set_flashdata(array('message' => display('delete_successfully')));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect("assign_role");
+    }
     public function japasys_role_delete($id)
     {
         $role = $this->permission_model->delete_role($id);

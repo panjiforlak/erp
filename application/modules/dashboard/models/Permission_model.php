@@ -105,6 +105,12 @@ class Permission_model extends CI_Model
         $this->db->delete('sec_role');
         return true;
     }
+    public function delete_user_role($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('sec_userrole');
+        return true;
+    }
     public function delete_role_permission($id)
     {
         $this->db->where('role_id', $id);
