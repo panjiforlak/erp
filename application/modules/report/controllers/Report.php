@@ -175,6 +175,12 @@ class Report extends MX_Controller
         $edtoday = date('Y-m-t');
 
         $from_date = $this->input->get('from_date');
+        $fromF = date('F', strtotime($from_date));
+        $fromY = date('Y', strtotime($from_date));
+        if ($from_date) {
+            $stoday = $fromF;
+            $gyear = $fromY;
+        }
         $to_date  = $this->input->get('to_date');
         $data['from_date'] = $from_date;
         $data['to_date'] = $to_date;
