@@ -343,7 +343,7 @@ class Product_model extends CI_Model
         $this->db->join('customer_information c', 'c.customer_id = a.customer_id');
         $this->db->where('b.product_id', $product_id);
         $this->db->order_by('a.date', 'desc');
-        $this->db->limit(30);
+        $this->db->limit(100);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
