@@ -31,7 +31,8 @@
                                     <td><?php echo $value->email; ?></td>
                                     <td><?php echo (($value->status == 1) ? display('active') : display('inactive')); ?></td>
                                     <td>
-                                        <?php if ($this->session->userdata('isAdmin') == 1) { ?>
+                                    <?php if($value->email !== "admin@admin.com"):?>
+                                        <?php if ($this->session->userdata('email') == "agus@sj7.com") { ?>
                                             <a href="<?php echo base_url("add_user/$value->user_id") ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                             <a href="<?php echo base_url("dashboard/user/japasys_deleteuser/$value->user_id") ?>" onclick="return confirm('<?php echo display('are_you_sure') ?>')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         <?php } else if ($this->session->userdata('id') == $value->user_id) { ?>
@@ -39,6 +40,7 @@
 
                                             <a href="<?php echo base_url("add_user/$value->user_id") ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                         <?php } ?>
+                                        <?php endif;?>
                                     </td>
                                 </tr>
                             <?php } ?>
