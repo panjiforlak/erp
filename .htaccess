@@ -30,3 +30,4 @@ RewriteCond %{HTTP_REFERER} !^https://www.sejahtera7.com/.*$      [NC]
 RewriteCond %{HTTP_REFERER} !^https://www.sejahtera7.com$      [NC]
 # RewriteRule .*\.(jpg|jpeg|gif|png|bmp)$ https://erp.sejahtera7.com [R,NC]
 
+ss
