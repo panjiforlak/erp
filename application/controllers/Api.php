@@ -83,7 +83,7 @@ class Api extends CI_Controller {
                 'user_type'  => 2,
                 'status'     => 1
                 );
-
+// comment
             
                 if($this->Api_model->user_entry($dataArray)){
 
