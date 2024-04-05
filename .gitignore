@@ -35,3 +35,4 @@ assets/data/outgoing/backup.sql
 assets/data/outgoing/
 assets/data/outgoing
 oh-my-zsh.sh
+application/config/database.php
